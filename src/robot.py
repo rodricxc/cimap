@@ -37,7 +37,7 @@ class Robot(object):
         self.reverse = 1
 
         # constants
-        self._max_vel = 0.5
+        self._max_vel = 0.6
         self._max_vel_ang = np.pi/2.0
         self.started = False
         self.min_hit_direction = 0.8
@@ -163,7 +163,8 @@ class Robot(object):
             if robot_state.hit_distance < 0.4 :
                 self.randomDirection = robot_state.hit_direction + robot_state.yaw_gt + 0.75 * np.pi + random.random() * np.pi*0.5    
                 
-            elif (not robot_state.previous.on_hit ) or abs(dif_ang_prev) < 0.5: 
+            # elif (not robot_state.previous.on_hit ) or abs(dif_ang_prev) < 0.5: 
+            elif (not robot_state.previous.on_hit and robot_state.previous.previous and not robot_state.previous.previous.on_hit ): 
                 self.randomDirection = robot_state.hit_direction + robot_state.yaw_gt + 0.5 * np.pi + random.random() * np.pi    
 
                 if self.numero == 0:
