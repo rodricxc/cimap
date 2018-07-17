@@ -1,0 +1,69 @@
+# simple_pioneer.world - basic world file example using pretty models
+# Authors: Richard Vaughan
+# $Id$
+
+include "car.inc"
+#include "swarm.inc"
+include "turtlebot.inc"
+include "map.inc"
+#include "sick.inc"
+
+paused 1
+
+# simulate as fast as possible
+# interval_real 1   
+speedup 0.5
+
+
+
+ 
+
+# configure the GUI window
+window (
+  size [ 800 716 ] # in pixels
+  scale 33.000   # pixels per meter
+  center [ 1.147  0.278 ]
+  rotate [ 0.000  0.000 ]
+
+  			
+  show_data 1              # 1=on 0=off
+  show_flags 0
+  show_blocks 1
+  show_clock 1
+  show_footprints 0
+  show_grid 0
+  show_trailarrows 0
+  show_trailrise 0
+  show_trailfast 0
+  show_occupancy 0
+  show_tree 1
+  pcam_on 0
+  screenshots 0
+
+)
+
+# load an environment bitmap
+floorplan (
+  name "cave"
+  bitmap "maps/complex.png"
+  size [16.000 16.000 0.800]
+  pose [0.000 0.000 0.000 0.000]
+  boundary 1
+)
+
+turtlebot( pose [  -2.367  -5.395 0.000 0.000 ] name "rob00" color "yellow" )
+turtlebot( pose [ -2.368  -5.931 0.000 0.000 ] name "rob01" color "blue" )
+turtlebot( pose [ -3.389  -6.605 0.000 0.000 ] name "rob02" color "red" )
+turtlebot( pose [ -3.217  -5.802 0.000 0.000 ] name "rob03" color "green" )
+
+turtlebot( pose [  -3.378 -4.346 0.000 0.000 ] name "rob04" color "yellow" )
+turtlebot( pose [ -3.963 -4.890 0.000 0.000 ] name "rob05" color "blue" )
+turtlebot( pose [ -1.822 -6.169 0.000 0.000 ] name "rob06" color "red" )
+turtlebot( pose [ -2.614 -6.468 0.000 0.000 ] name "rob07" color "green" )
+
+turtlebot( pose [  -2.577 -4.741 0.000 0.000 ] name "rob08" color "yellow" )
+turtlebot( pose [ -2.271 -6.766 0.000 0.000 ] name "rob09" color "blue" )
+turtlebot( pose [ -3.231 -5.151 0.000 0.000 ] name "rob10" color "red" )
+turtlebot( pose [ -3.962 -5.635 0.000 0.000 ] name "rob11" color "green" )
+
+turtlebot( pose [  100.000  100.000 0.000 0.000 ] name "rob9999999" color "yellow" )

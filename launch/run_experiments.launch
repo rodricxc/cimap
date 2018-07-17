@@ -1,0 +1,24 @@
+<launch>
+    <!--  Arguments for simulation launch -->
+    <arg name="num_robots" default="12" /> <!-- 12, 24, 36 -->
+    <arg name="map" default="simple8" />  <!-- map used on simulation-->
+
+    <param name="num_robots" type="int" value="$(arg num_robots)" />
+
+
+    <!-- STAGE SIMULATOR -->
+    <node pkg="stage_ros" type="stageros" name="stageros" args="$(find cimap)/simulation/$(arg map)_swarm_$(arg num_robots).world" required="true"/>
+
+
+    <!-- CIMAP NODE -->
+    <node pkg="cimap" type="explorer.py" name='cimap_explorer' output="screen" required="true"/>
+
+
+
+
+    
+
+
+
+
+</launch>
