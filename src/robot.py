@@ -10,7 +10,7 @@ import copy
 import scipy.interpolate as interpolate
 
 # local libs
-from robot_state import RobotState, State
+from robot_state import RobotState, State, CloseRobot
 
 # ros message packs
 from geometry_msgs.msg import Twist, Quaternion
@@ -35,14 +35,34 @@ class Robot(object):
         # state variables
         self.randomDirection = random.random()*np.pi*2
         self.reverse = 1
+        self.follow_wall = False
+        self.follow_wall_begin = None
+        self.on_scape = False
 
         # constants
         self._max_vel = 0.9
         self._max_vel_ang = np.pi/2.0
         self.started = False
         self.min_hit_direction = 0.8
+        self.follow_wall_maxtime = 5
 
         print "[Status]: Starting robot named: ", self.nome
+
+    @property
+    def id(self):
+        return self.numero
+
+    def prepareToPickle(self):
+        for t, s in self._states.iteritems():
+            s.setPreviousRobotState(None)
+        self.state_lock = None
+        
+
+    def onPickleload(self):
+        self.state_lock = threading.RLock()
+        sorted_idx = [0]+sorted(self._states)
+        for i in range(1,len(sorted_idx)):
+            self.getState(sorted_idx[i]).setPreviousRobotState(self.getState(sorted_idx[i-1])) 
 
     def initStates(self):
         self.state_lock = threading.RLock()
@@ -52,7 +72,7 @@ class Robot(object):
         self._lastState.noised = State([0, 0, 0])
         self._lastState.filtered = State([0, 0, 0])
 
-    def getState(self, timestamp=None):
+    def getState(self, timestamp=None, insert=True):
         self.state_lock.acquire()
 
         # case of external call, for non modification
@@ -61,9 +81,14 @@ class Robot(object):
             self.state_lock.release()
             return c
 
-        timestamp = self.stamptofloat(timestamp)
+        timestamp = stamptofloat(timestamp)
         
+
         if timestamp not in self._states:
+            if not insert:
+                self.state_lock.release()
+                return None
+                
             self._states[timestamp] = RobotState(timestamp=timestamp)
             self._states[timestamp].setPreviousRobotState(self._lastState)
             # if timestamp > self._lastState.time:
@@ -143,6 +168,7 @@ class Robot(object):
     def runControl(self, robot_state):
         # self.randomWalkOnObstacle(robot_state)
         self.randomWalkOnObstacleDiferencial(robot_state)
+        # self.randomWalkFollowDiferencial(robot_state)
         
 
     def randomWalkOnObstacle(self, robot_state): 
@@ -171,8 +197,6 @@ class Robot(object):
             # elif (not robot_state.previous.on_hit ): 
                 self.randomDirection = robot_state.hit_direction + robot_state.yaw_gt + 0.5 * np.pi + random.random() * np.pi    
 
-                if self.numero == 0:
-                    print("changed direction")
 
 
         dif_ang = wrap_pi(self.randomDirection - robot_state.yaw_gt)
@@ -185,6 +209,61 @@ class Robot(object):
 
         x = self._max_vel*np.cos(dif_ang)*self.reverse
 
+        w = dif_ang
+        y = 0
+
+        self.sendVelocities((x, y, w))
+
+    def randomWalkFollowDiferencial(self, robot_state): 
+        # control state
+        if robot_state.on_hit: 
+            # start state if not started
+            if not self.follow_wall:
+                self.follow_wall_begin = robot_state.time
+                self.follow_wall = True
+            
+            if self.follow_wall:
+                if self.numero == 0:
+                    print("following wall", robot_state.time)
+                # leave wall after time
+                if robot_state.time - self.follow_wall_begin > self.follow_wall_maxtime:
+                    self.randomDirection = robot_state.hit_direction + robot_state.yaw_gt + 0.5 * np.pi + random.random() * np.pi    
+
+                else:
+                    hit_dir =   wrap_pi(robot_state.hit_direction + robot_state.yaw_gt)
+                    walk_dir =  wrap_pi(hit_dir+np.pi/2)
+                    walk_dif =  wrap_pi(walk_dir - self.randomDirection)
+
+                    if abs(walk_dif) > np.pi/2:
+                        self.randomDirection = wrap_pi(walk_dir+np.pi)
+                    else:
+                        self.randomDirection = walk_dir
+
+            
+            if robot_state.hit_distance < 0.4 or (self.on_scape and robot_state.hit_distance < 0.5):
+                self.on_scape=True
+                self.randomDirection = robot_state.hit_direction + robot_state.yaw_gt + 0.75 * np.pi + random.random() * np.pi*0.0    
+            else:
+                self.on_scape=False                
+        
+        # easy hit
+        elif not (np.any(robot_state.laser < 0.8)):
+            self.follow_wall = False
+
+
+
+        # control direction
+        dif_ang = wrap_pi(self.randomDirection - robot_state.yaw_gt)
+        
+        if abs(dif_ang) > np.pi/2.0:
+            self.reverse = -1
+            dif_ang = wrap_pi(dif_ang + np.pi)
+        else: 
+            self.reverse = 1 
+
+        x = self._max_vel*(np.cos(dif_ang)**2)*self.reverse
+        if dif_ang > np.pi/3:
+            x = 0
         w = dif_ang
         y = 0
 
@@ -237,17 +316,36 @@ class Robot(object):
     def oriToEuler(self, ori):
         return oriToEuler(ori)
 
-    def stamptostr(self, stamp):
-        return "%.2f" % self.stamptofloat(stamp)
 
-    def stamptofloat(self, stamp):
-        if  isinstance(stamp, (float,)):
-            return stamp
-        return np.round(stamp.secs+stamp.nsecs/1000000000.0, decimals=3)
+
+
+
 
 
 
 # auxiliary
+def r_distance(r1, r2, time):
+    rs1 = r1.getState(time, insert=False)
+    rs2 = r2.getState(time, insert=False)
+
+    if not rs1 or not rs2:
+        return None, None, None
+
+    ed =  np.linalg.norm(rs1.gt.mean[:2]-rs2.gt.mean[:2])
+    glob_ori =  np.arctan2(rs2.gt.mean[1]-rs1.gt.mean[1], rs2.gt.mean[0]-rs1.gt.mean[0])
+    relative_ori = wrap_pi(glob_ori - rs1.yaw_gt)
+
+    return ed, relative_ori, rs1
+
+
+def stamptostr(stamp):
+    return "%.2f" % stamptofloat(stamp)
+
+def stamptofloat(stamp):
+    if  isinstance(stamp, (float,)):
+        return np.round(stamp,decimals=2)
+    return np.round(stamp.secs+stamp.nsecs/1000000000.0, decimals=2)
+
 def wrap_pi(a):
     while a <= -np.pi:
         a += 2*np.pi

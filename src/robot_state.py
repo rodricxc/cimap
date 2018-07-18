@@ -106,6 +106,8 @@ class RobotState(object):
         self.setLaserFinished(False)
         self.recalcLater = False
 
+        self._close_robots = {}
+
         self._previous = previous
 
     def __str__(self):
@@ -213,3 +215,38 @@ class RobotState(object):
 
     def setLaserFinished(self, value):
         self._is_laser_finished = value
+
+    @property
+    def close_robots(self):
+        return self._close_robots
+
+    def addCloseRobot(self, close_robot):
+        if close_robot.id in self._close_robots:
+            return False
+        
+        if not isinstance(close_robot, (CloseRobot)):
+            raise AssertionError('close_robot must be a CloseRobot object type')
+
+        self._close_robots[close_robot.id]  =  close_robot.id 
+        return True
+
+
+class CloseRobot(object):
+    def __init__(self, id, distance, direction):
+        super(CloseRobot, self).__init__()
+        self._id = id
+        self._distance = distance
+        self._direction = direction
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def distance(self):
+        return self._distance
+
+    @property
+    def direction(self):
+        return self._direction
+
