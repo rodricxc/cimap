@@ -38,7 +38,6 @@ class Solver(object):
         # store start time
         starttime = rospy.get_rostime()
         self.start_at = starttime
-        self.stoptime = 60
 
         # start robots
         [r.start() for r in self.swarm]
@@ -48,6 +47,7 @@ class Solver(object):
             # stop after k seconds
             if now.secs >= self.stoptime:
                 [r.stop() for r in self.swarm]
+                self.rate.sleep()
                 self.rate.sleep()
                 break
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     try:
         solver = Solver()
         solver.run()
-        print "[Status]: Exiting node swarm_map."
+        print "[Status]: Exiting node cimap_explorer."
     except rospy.ROSInterruptException:
         pass
 

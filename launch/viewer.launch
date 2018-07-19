@@ -1,0 +1,5 @@
+<launch>
+
+  <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find swarm_map)/launch/rviz_launch.rviz" />
+
+</launch>

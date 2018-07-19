@@ -11,6 +11,7 @@ import scipy.interpolate as interpolate
 
 # local libs
 from robot_state import RobotState, State, CloseRobot
+from models import sample_motion_model_odometry as m_odom, motion_model_odometry_to_control as odom_to_control
 
 # ros message packs
 from geometry_msgs.msg import Twist, Quaternion
@@ -38,6 +39,7 @@ class Robot(object):
         self.follow_wall = False
         self.follow_wall_begin = None
         self.on_scape = False
+        self.pose_publishing = False
 
         # constants
         self._max_vel = 0.9
@@ -58,7 +60,7 @@ class Robot(object):
         self.state_lock = None
         
 
-    def onPickleload(self):
+    def onPickleLoad(self):
         self.state_lock = threading.RLock()
         sorted_idx = [0]+sorted(self._states)
         for i in range(1,len(sorted_idx)):
@@ -97,6 +99,7 @@ class Robot(object):
         return self._states[timestamp]
 
     def initRosCom(self):
+        self.unregistered = False
         self.pub_cmd_vel = rospy.Publisher('/' + self.nome + '/cmd_vel', Twist, queue_size=10)
         self.sub_base_pose_ground_truth = rospy.Subscriber("/" + self.nome + "/base_pose_ground_truth", Odometry, self.updateBasePose)
         self.sub_base_scan = rospy.Subscriber("/" + self.nome + "/base_scan", LaserScan, self.updateLaser)
@@ -104,14 +107,72 @@ class Robot(object):
     def stopRosComunicacao(self):
         self.unregistered = True
         #self.sub_odom.unregister()
-        self.sub_base_pose_ground_truth.unregister()
+        self.rate = rospy.Rate(10)  # 10hz default
+        self.rate.sleep()
+
         self.sub_base_scan.unregister()
+        self.sub_base_pose_ground_truth.unregister()
         self.pub_cmd_vel.unregister()
+
+    def initPosePublishers(self):
+        self.pub_pose_gt = rospy.Publisher('/' + self.nome + '/pose_gt_with_cov', PoseWithCovarianceStamped, queue_size=1)
+        self.pub_pose_odom = rospy.Publisher('/' + self.nome + '/pose_noised_with_cov', PoseWithCovarianceStamped, queue_size=1)
+        self.pub_pose_filtered = rospy.Publisher('/' + self.nome + '/pose_filtered_with_cov', PoseWithCovarianceStamped, queue_size=1)
+        self.pose_publishing = True
+        
+
+    def stopPosePublishers(self):
+        self.pose_publishing = False
+        self.pub_pose_gt.unregister()
+        self.pub_pose_odom.unregister()
+        self.pub_pose_filtered.unregister()
+
+    def publishPoses(self, t):
+        state = self.getState(t,insert=False)
+        if state and self.pose_publishing:
+            self.publishPoseWithCov(self.pub_pose_gt, state.gt, t)
+            self.publishPoseWithCov(self.pub_pose_odom, state.odom, t)
+
+    def publishPoseWithCov(self, publisher, state, t):
+        if not state:
+            return
+        # header (no seq)
+        pwc = PoseWithCovarianceStamped()
+        # pwc.header.stamp = t
+        pwc.header.frame_id = 'odom'
+
+        # pose cov
+        pwc.pose.covariance = self.covConverter(state.cov)
+        pwc.pose.pose = self.poseConverter(state.mean)
+
+        # publish
+        publisher.publish(pwc)
+
+    def covConverter(self, cov):
+        cov = np.insert(cov, (2, 2, 2), 0, axis=0)
+        cov = np.insert(cov, (2, 2, 2), 0, axis=1)
+        return list(cov.flatten())
+
+    def poseConverter(self, p):
+        pose = Pose()
+
+        x, y, w = p[:3]
+        pose.position.x = x
+        pose.position.y = y
+        pose.position.z = 0
+
+        x, y, z, w = tf.transformations.quaternion_from_euler(0, 0, w)[:4]
+        pose.orientation.x = x
+        pose.orientation.y = y
+        pose.orientation.z = z
+        pose.orientation.w = w
+
+        return pose
+
 
     def start(self):
         self.started = True
-
-    
+   
     def stop(self):
         self.started = False
         self.stopRosComunicacao()
@@ -132,6 +193,9 @@ class Robot(object):
 
     ####  Laser
     def updateLaser(self, data):
+        if self.unregistered:
+            return
+
         current_state = self.getState(data.header.stamp)
         current_state.laser = np.array(data.ranges, dtype=np.float)
         current_state.on_hit = self.verifyHits(current_state)
@@ -143,6 +207,9 @@ class Robot(object):
 
     #### POSE
     def updateBasePose(self, data):
+        if self.unregistered:
+            return
+
         current_state = self.getState(data.header.stamp)
 
         # GT update
@@ -158,10 +225,17 @@ class Robot(object):
         if not current_state.isLaserFinished() or not current_state.isPoseFinished():
             return
 
-
-
-
         self.runControl(current_state)
+
+    # OTHER
+    def calcOdometry(self, odom_parameters):
+        s1 = self.getState(0)
+        s1.odom = s1.gt
+        for t in self.state_time_sequence():
+            rs1 = self.getState(t)
+            rs0 = rs1.previous
+            rs1.odom = State(m_odom([rs0.gt.mean, rs1.gt.mean], rs0.odom.mean, odom_parameters))
+
 
 
     # CONTROL
@@ -317,6 +391,9 @@ class Robot(object):
         return oriToEuler(ori)
 
 
+    def state_time_sequence(self):
+        return sorted(self._states.keys())
+
 
 
 
@@ -328,7 +405,7 @@ def r_distance(r1, r2, time):
     rs1 = r1.getState(time, insert=False)
     rs2 = r2.getState(time, insert=False)
 
-    if not rs1 or not rs2:
+    if not rs1 or not rs1.gt or not rs2 or not rs2.gt:
         return None, None, None
 
     ed =  np.linalg.norm(rs1.gt.mean[:2]-rs2.gt.mean[:2])
@@ -342,7 +419,7 @@ def stamptostr(stamp):
     return "%.2f" % stamptofloat(stamp)
 
 def stamptofloat(stamp):
-    if  isinstance(stamp, (float,)):
+    if  isinstance(stamp, (float,int,)):
         return np.round(stamp,decimals=2)
     return np.round(stamp.secs+stamp.nsecs/1000000000.0, decimals=2)
 

@@ -156,6 +156,14 @@ class RobotState(object):
         self._state_noised = value
 
     @property
+    def odom(self):
+        return self.noised
+
+    @odom.setter
+    def odom(self, value):
+        self.noised = value
+
+    @property
     def filtered(self):
         return self._state_filtered
 
