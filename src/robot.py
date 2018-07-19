@@ -107,8 +107,6 @@ class Robot(object):
     def stopRosComunicacao(self):
         self.unregistered = True
         #self.sub_odom.unregister()
-        self.rate = rospy.Rate(10)  # 10hz default
-        self.rate.sleep()
 
         self.sub_base_scan.unregister()
         self.sub_base_pose_ground_truth.unregister()
@@ -175,6 +173,7 @@ class Robot(object):
    
     def stop(self):
         self.started = False
+        self.sendVelocities()
         self.stopRosComunicacao()
 
     # Function to publish velocity
