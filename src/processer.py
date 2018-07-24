@@ -54,9 +54,9 @@ class Solver(object):
             ## PREDICTION STEP
             # -> calc estimator of controls AND
             #    estimate error matrix of control
-            [r.calcControlAndError(t) for r in self.swarm]
+            [r.calcControlAndError(t, odom_parameters) for r in self.swarm]
             # -> calc transition matrixes and model for control
-            [r.calcTransitionMatrixes(t) for r in self.swarm]
+            [r.calcTransitionMatrix(t) for r in self.swarm]
             # -> calc prediction State for filter, applying matrixes
             [r.calcPrediction(t) for r in self.swarm]
 

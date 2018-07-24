@@ -230,10 +230,22 @@ class Robot(object):
     def calcOdometry(self, odom_parameters):
         s1 = self.getState(0)
         s1.odom = s1.gt
+        s1.filtered = s1.gt
         for t in self.state_time_sequence():
             rs1 = self.getState(t)
             rs0 = rs1.previous
             rs1.odom = State(m_odom([rs0.gt.mean, rs1.gt.mean], rs0.odom.mean, odom_parameters))
+
+    
+    def calcControlAndError(self, t, error):
+        current_state = self.getState(t, insert=False)
+        self._u, self._E = odom_to_control([current_state.previous.odom.mean, current_state.previous.odom.mean], error)
+        
+    def calcTransitionMatrix(self, t):
+        
+
+    def calcPrediction(self, t):
+        pass
 
 
 
