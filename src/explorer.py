@@ -41,6 +41,7 @@ class Solver(object):
 
         # start robots
         [r.start() for r in self.swarm]
+        [r.useGps(False) for r in self.swarm]
 
         while not rospy.is_shutdown():
             now = rospy.get_rostime()

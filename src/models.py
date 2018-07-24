@@ -53,15 +53,19 @@ def motion_model_odometry_to_control(u_t, error):
     x_b, y_b, theta_b = xb_0
     x_bl, y_bl, theta_bl = xb_1
     
-
+    
     delta_rot1 = np.arctan2(y_bl - y_b, x_bl - x_b) - theta_b
     delta_trans = ((x_b - x_bl) ** 2 + (y_b - y_bl) ** 2)**0.5
+
+    if (x_bl - x_b) * np.cos(theta_b) + (y_bl - y_b) * np.sin(theta_b) < 0:
+        delta_trans *= -1
+
     delta_rot2 = theta_bl - theta_b - delta_rot1
 
-    u = np.array([delta_trans, delta_rot1 + delta_rot2])
+    u = np.array([delta_trans, theta_bl - theta_b])
 
-    E = np.array([[error[2] * delta_trans + error[3] * (abs(delta_rot1) + abs(delta_rot2)), 0],
-                  [0,  error[0] * abs(delta_rot1) + error[1] * delta_trans + error[0] * abs(delta_rot2) + error[1] * delta_trans]])
+    E = np.array([[error[2] * abs(delta_trans) + error[3] * (abs(delta_rot1) + abs(delta_rot2)), 0],
+                  [0,  error[0] * abs(delta_rot1) + error[1] *abs(delta_trans) + error[0] * abs(delta_rot2) + error[1] * abs(delta_trans)]])
     
     return u, E
 

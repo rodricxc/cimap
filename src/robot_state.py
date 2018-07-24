@@ -235,7 +235,7 @@ class RobotState(object):
         if not isinstance(close_robot, (CloseRobot)):
             raise AssertionError('close_robot must be a CloseRobot object type')
 
-        self._close_robots[close_robot.id]  =  close_robot.id 
+        self._close_robots[close_robot.id]  =  close_robot
         return True
 
 

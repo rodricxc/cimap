@@ -20,6 +20,11 @@ from nav_msgs.msg import Odometry, Path
 from sensor_msgs.msg import LaserScan
 
 
+# defining/renaming  some matematical functions
+cos, sin = np.cos, np.sin
+inv = np.linalg.pinv
+det = np.linalg.det
+
 
 class Robot(object):
     """docstring for Robot"""
@@ -40,6 +45,9 @@ class Robot(object):
         self.follow_wall_begin = None
         self.on_scape = False
         self.pose_publishing = False
+        self.has_gps = False
+        self._x_pred = np.zeros(3)
+        self._P_pred = np.diag([1,1,1])
 
         # constants
         self._max_vel = 0.9
@@ -53,6 +61,13 @@ class Robot(object):
     @property
     def id(self):
         return self.numero
+
+    def hasGps(self):
+        return self.has_gps
+        # return False
+
+    def useGps(self, value):
+        self.has_gps = value
 
     def prepareToPickle(self):
         for t, s in self._states.iteritems():
@@ -130,6 +145,8 @@ class Robot(object):
         if state and self.pose_publishing:
             self.publishPoseWithCov(self.pub_pose_gt, state.gt, t)
             self.publishPoseWithCov(self.pub_pose_odom, state.odom, t)
+            self.publishPoseWithCov(self.pub_pose_filtered, state.filtered, t)
+            
 
     def publishPoseWithCov(self, publisher, state, t):
         if not state:
@@ -235,24 +252,129 @@ class Robot(object):
             rs1 = self.getState(t)
             rs0 = rs1.previous
             rs1.odom = State(m_odom([rs0.gt.mean, rs1.gt.mean], rs0.odom.mean, odom_parameters))
+            rs1.filtered = rs1.odom
 
-    
+
+    # UPDATE FUNCTIONS
+    def update(self, t, swarm):
+
+        current_state = self.getState(t, insert=False)
+        if not current_state:
+            return False
+
+        x = self._x_pred
+        P = self._P_pred
+
+        # in case of using gps, update with kalman filter
+        if self.hasGps():
+            GPS_NOISE = np.diag([0.5, 0.5, 0.3])
+            C = np.eye(3)
+
+            x_gps = current_state.gt.mean +  np.random.multivariate_normal((0,0,0), GPS_NOISE)
+            P_gps = GPS_NOISE            
+            
+            # Gain matrix
+            K = P.dot(C.T).dot(inv(C.dot(P).dot(C.T)+P_gps))
+
+            # normalize angles into smalest distance possible 
+            x[2] = wrap_pi(x[2])
+            x[2], x_gps[2] = np.unwrap([x[2], x_gps[2]])
+
+            # update values and probabilities with gain
+            x = x + K.dot(x_gps - C.dot(x))
+            x[2] = wrap_pi(x[2])
+            P = (np.eye(3) - K.dot(C)).dot(P)
+
+        else:
+            for cr_id, close_robot in current_state.close_robots.iteritems():
+
+                x_cr, P_cr = swarm[cr_id].getPredicted()
+                
+                ## exchange with GPS robots
+                if swarm[cr_id].hasGps():
+                    
+
+                    pass
+
+
+                ## exchange with Non-GPS robot
+                else:
+                    # CI update
+
+                    pass
+
+                    # kalman update
+
+            
+            
+
+        # save results on state
+        current_state.filtered = State(x, P)
+
+
+    # PREDICTION FUNCTIONS
+    def prediction(self, t, error):
+        current_state = self.getState(t, insert=False)
+
+        if not current_state:
+            return False
+        
+        # calc variables for transition
+        self._last_t_processed = t
+        self._u, self._E = odom_to_control([current_state.previous.odom.mean, current_state.odom.mean], error)
+        self._phi = self.createPhiMatrix(self._u, current_state.previous.filtered.mean[2])
+        self._G = self.createGMatrix(current_state.previous.filtered.mean[2])
+
+        # calc next pose prediction 'x' and covariance 'P'
+        #     x1 = x0 + motion_matrix * control_u 
+        self._x_pred = current_state.previous.filtered.mean + self._G.dot(self._u)
+        #     P1 =  phi * P0 * phi_T    +   motion_matrix * control_Error * motion_matrix_T
+        self._P_pred =  self._phi.dot(current_state.previous.filtered.cov).dot(self._phi.T) +  self._G.dot(self._E).dot(self._G.T)
+
+        
+        # FOR TEST ONLY
+        # current_state.filtered = State(self._x_pred, self._P_pred)
+        # if self.id == 1:
+        #     print("---------------------------")
+        #     print "u:      ", self._u
+        #     print "pred 0: ", current_state.previous.filtered.mean
+        #     print "pred 1: ", self._x_pred
+        #     print "odom 0: ", current_state.previous.odom.mean
+        #     print "odom 1: ", current_state.odom.mean
+        #     print("---------------------------")
+        
+    def getPredicted(self):
+        return self._x_pred, self._P_pred
+
     def calcControlAndError(self, t, error):
         current_state = self.getState(t, insert=False)
+        if not current_state:
+            return False
         self._u, self._E = odom_to_control([current_state.previous.odom.mean, current_state.previous.odom.mean], error)
-        
-    def calcTransitionMatrix(self, t):
-        
+        self._phi = self.createPhiMatrix(self._u, current_state.previous.odom.mean[2])
+        self._G = self.createGMatrix(current_state.previous.odom.mean[2])
 
-    def calcPrediction(self, t):
-        pass
 
+
+    def createMotionMatrix(self, theta):
+        return np.array([[cos(theta), 0],
+                         [sin(theta), 0],
+                         [0         , 1]])
+
+    def createPhiMatrix(self, u, theta, dt=1):
+        return np.array([[1, 0, -dt*u[0]*sin(theta)],
+                         [0, 1,  dt*u[0]*cos(theta)],
+                         [0, 0,  1                ]])
+
+    def createGMatrix(self, theta, dt=1):
+        return self.createMotionMatrix(theta)*dt
 
 
     # CONTROL
     def runControl(self, robot_state):
         # self.randomWalkOnObstacle(robot_state)
         self.randomWalkOnObstacleDiferencial(robot_state)
+        # self.randomWalkOnObstacleDiferencialForward(robot_state)
         # self.randomWalkFollowDiferencial(robot_state)
         
 
@@ -295,6 +417,45 @@ class Robot(object):
         x = self._max_vel*np.cos(dif_ang)*self.reverse
 
         w = dif_ang
+        y = 0
+
+        self.sendVelocities((x, y, w))
+
+    def randomWalkOnObstacleDiferencialForward(self, robot_state): 
+        if robot_state.on_hit: 
+            dif_ang_prev = wrap_pi(self.randomDirection - robot_state.yaw_gt)
+            if dif_ang_prev > np.pi/2.0:
+                dif_ang_prev = wrap_pi(dif_ang_prev-np.pi)
+
+
+            hit_dif =   wrap_pi(robot_state.hit_direction + robot_state.yaw_gt  - self.randomDirection)
+
+            
+            if robot_state.hit_distance < 0.5 :
+                self.randomDirection = robot_state.hit_direction + robot_state.yaw_gt + 0.75 * np.pi + random.random() * np.pi*0.5    
+                
+            elif abs(hit_dif) < np.pi/4.0: 
+            # elif (not robot_state.previous.on_hit) and abs(hit_dif) < np.pi/3: 
+            # elif (not robot_state.previous.on_hit ): 
+                self.randomDirection = robot_state.hit_direction + robot_state.yaw_gt + 0.5 * np.pi + random.random() * np.pi    
+
+
+
+        dif_ang = wrap_pi(self.randomDirection - robot_state.yaw_gt)
+
+        self.reverse = 1
+        # if abs(dif_ang) > np.pi/2.0:
+        #     self.reverse = -1
+        #     dif_ang = wrap_pi(dif_ang + np.pi)
+
+        if abs(dif_ang) < np.pi/2.0:
+            x = self._max_vel*np.cos(dif_ang)*self.reverse
+            w = dif_ang
+        else:
+            x = 0
+            w = dif_ang
+        
+            
         y = 0
 
         self.sendVelocities((x, y, w))

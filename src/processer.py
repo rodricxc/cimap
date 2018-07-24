@@ -25,6 +25,7 @@ class Solver(object):
         self._robot_perception_distance = rospy.get_param("/robot_prerception_distance", 1)
         self._experiment_id = rospy.get_param("/experiment_id", 0)
         self._map_name = rospy.get_param("/map_name", 'default')
+        self._stop_time = rospy.get_param("/stoptime", 60)
         self.swarm = []
 
 
@@ -45,36 +46,48 @@ class Solver(object):
         # init pose Publishers
         [r.initPosePublishers() for r in self.swarm]
 
+        # set to use gps
+        [r.useGps(False) for r in self.swarm]
+        [self.swarm[i].useGps(True) for i in {2,7}]
 
-        MAX_TIME = 60
+
+        MAX_TIME = self._stop_time
         t=0
         # For each time
-        while t <= MAX_TIME:            
-
+        while t <= MAX_TIME:
+            if int(t*10)%10 == 0:            
+                print('at time %5.2f'%t)
             ## PREDICTION STEP
             # -> calc estimator of controls AND
             #    estimate error matrix of control
-            [r.calcControlAndError(t, odom_parameters) for r in self.swarm]
             # -> calc transition matrixes and model for control
-            [r.calcTransitionMatrix(t) for r in self.swarm]
             # -> calc prediction State for filter, applying matrixes
-            [r.calcPrediction(t) for r in self.swarm]
-
+            [r.prediction(t, odom_parameters) for r in self.swarm]
+            
             ## UPDATE STEP
+            [r.update(t, self.swarm) for r in self.swarm]
+            
 
 
 
 
 
-        # t = 0 
-        # while not rospy.is_shutdown():
-        #     t += 0.1
-        #     self.swarm[0].publishPoses(t)
-        #     self.swarm[1].publishPoses(t)
-        #     self.swarm[2].publishPoses(t)
-        #     self.swarm[3].publishPoses(t)
-        #     # self.rate.sleep()
-        #     rospy.sleep(0.04)
+
+
+
+
+
+            # DEBUG: Publiush calcs
+            [r.publishPoses(t) for r in self.swarm[:]]
+            rospy.sleep(0.1)
+            if rospy.is_shutdown():
+                return
+
+            # time increase
+            t+=0.1
+
+        rospy.sleep(10)
+        # end 
 
 
     def loadSwarm(self):
