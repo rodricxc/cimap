@@ -258,3 +258,11 @@ class CloseRobot(object):
     def direction(self):
         return self._direction
 
+    @property
+    def rho(self):
+        return self.distance
+
+    @property
+    def phi(self):
+        return self.direction
+

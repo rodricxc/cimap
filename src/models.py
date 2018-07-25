@@ -24,10 +24,10 @@ def sample_motion_model_odometry(u_t, x_t1, error, type_distrib='normal'):
     
     delta_rot1 = np.arctan2(y_bl - y_b, x_bl - x_b) - theta_b
     delta_trans = ((x_b - x_bl) ** 2 + (y_b - y_bl) ** 2)**0.5
-    delta_rot2 = theta_bl - theta_b - delta_rot1
+    delta_rot2 = theta_bl - theta_b - delta_rot1 
 
     delta_ch_rot1 = delta_rot1   - sample(error[0] * abs(delta_rot1) + error[1] * delta_trans, type=type_distrib)
-    delta_ch_trans = delta_trans - sample(error[2] * delta_trans + error[3] * (abs(delta_rot1) + abs(delta_rot2)), type=type_distrib)
+    delta_ch_trans = delta_trans - sample(error[2] * delta_trans + error[3] * (abs(delta_rot1 + delta_rot2)), type=type_distrib)
     delta_ch_rot2 = delta_rot2   - sample(error[0] * abs(delta_rot2) + error[1] * delta_trans, type=type_distrib)
 
     _x = x + delta_ch_trans * np.cos(theta + delta_ch_rot1)
@@ -64,8 +64,8 @@ def motion_model_odometry_to_control(u_t, error):
 
     u = np.array([delta_trans, theta_bl - theta_b])
 
-    E = np.array([[error[2] * abs(delta_trans) + error[3] * (abs(delta_rot1) + abs(delta_rot2)), 0],
-                  [0,  error[0] * abs(delta_rot1) + error[1] *abs(delta_trans) + error[0] * abs(delta_rot2) + error[1] * abs(delta_trans)]])
+    E = np.array([[error[2] * abs(delta_trans) + error[3] * (abs(delta_rot1 + delta_rot2)), 0],
+                  [0,  error[0] * abs(delta_rot1 + delta_rot2) + error[1] *abs(delta_trans)]])
     
     return u, E
 

@@ -8,6 +8,7 @@ import numpy as np
 import threading 
 import copy
 import scipy.interpolate as interpolate
+from scipy import optimize
 
 # local libs
 from robot_state import RobotState, State, CloseRobot
@@ -245,10 +246,15 @@ class Robot(object):
 
     # OTHER
     def calcOdometry(self, odom_parameters):
-        s1 = self.getState(0)
-        s1.odom = s1.gt
-        s1.filtered = s1.gt
-        for t in self.state_time_sequence():
+        seq = self.state_time_sequence()
+        
+        s1 = self.getState(seq[1])
+        s0 = s1.previous
+        s0.gt = s1.gt
+        s0.odom = s1.gt
+        s0.filtered = s1.gt
+        
+        for t in seq:
             rs1 = self.getState(t)
             rs0 = rs1.previous
             rs1.odom = State(m_odom([rs0.gt.mean, rs1.gt.mean], rs0.odom.mean, odom_parameters))
@@ -256,7 +262,7 @@ class Robot(object):
 
 
     # UPDATE FUNCTIONS
-    def update(self, t, swarm):
+    def update(self, t, swarm, update_type='ci'):
 
         current_state = self.getState(t, insert=False)
         if not current_state:
@@ -265,20 +271,25 @@ class Robot(object):
         x = self._x_pred
         P = self._P_pred
 
+        # error expected on perception
+        # R_ij = R_ji = np.diag([0.05, 0.05])
+        R_ij = R_ji = np.diag([0.01, 0.01])
+
+        C = np.eye(3)
+
         # in case of using gps, update with kalman filter
         if self.hasGps():
             GPS_NOISE = np.diag([0.5, 0.5, 0.3])
-            C = np.eye(3)
 
             x_gps = current_state.gt.mean +  np.random.multivariate_normal((0,0,0), GPS_NOISE)
             P_gps = GPS_NOISE            
             
-            # Gain matrix
-            K = P.dot(C.T).dot(inv(C.dot(P).dot(C.T)+P_gps))
-
             # normalize angles into smalest distance possible 
             x[2] = wrap_pi(x[2])
             x[2], x_gps[2] = np.unwrap([x[2], x_gps[2]])
+
+            # Gain matrix
+            K = P.dot(C.T).dot(inv(C.dot(P).dot(C.T)+P_gps))
 
             # update values and probabilities with gain
             x = x + K.dot(x_gps - C.dot(x))
@@ -286,30 +297,91 @@ class Robot(object):
             P = (np.eye(3) - K.dot(C)).dot(P)
 
         else:
-            for cr_id, close_robot in current_state.close_robots.iteritems():
+            for cr_id, close_i_robot in current_state.close_robots.iteritems():
 
                 x_cr, P_cr = swarm[cr_id].getPredicted()
-                
+                close_j_robot = swarm[cr_id].getState(t,insert=False).close_robots[self.id]
+
+                x_meas, P_meas = self.calcRelativeState([close_j_robot.distance, close_j_robot.direction], R_ji,
+                                                        [close_i_robot.distance, close_i_robot.direction], R_ij, 
+                                                        x_cr, P_cr)
+
+                # make sure that the angles are in the closest form possible
+                x[2] = wrap_pi(x[2])
+                x[2], x_meas[2] = np.unwrap([x[2], x_meas[2]])
+
                 ## exchange with GPS robots
                 if swarm[cr_id].hasGps():
                     
+                    # Gain matrix
+                    K = P.dot(C.T).dot(inv(C.dot(P).dot(C.T)+P_meas))
 
-                    pass
+                    # update values and probabilities with gain
+                    x = x + K.dot(x_meas - C.dot(x))
+                    x[2] = wrap_pi(x[2])
+                    P = (np.eye(3) - K.dot(C)).dot(P)
 
 
                 ## exchange with Non-GPS robot
                 else:
                     # CI update
+                    if update_type=='ci':
+                        w = optimize.fminbound(lambda w : det(inv(inv(P) * w + inv(P_meas) * (1 - w))), 0, 1)
+                        # w = 0.5
 
-                    pass
+                        P_ci = inv(inv(P) * w + inv(P_meas) * (1 - w))
+                        x_ci = P.dot(w * inv(P).dot(x) + (1 - w) * inv(P_meas).dot(x_meas))
 
-                    # kalman update
+                        x_ci[2] = wrap_pi(x_ci[2])
 
+                        P = P_ci
+                        x = x_ci
+
+                    # kalman update non recursive
+                    else:
+                        pass
+                    
             
             
 
         # save results on state
         current_state.filtered = State(x, P)
+
+    
+
+
+    def calcRelativeState(self, r_ij, R_ij, r_ji, R_ji, xi, Pi):
+        # r_ij  -->  relative estimate measurement (distance and angle) of j from i
+        # r_ji  -->  relative estimate measurement (distance and angle) of i from j
+        
+        # Calc Relative Pose
+
+        m_ij = np.array([r_ij[0] * cos(r_ij[1] + xi[2]),
+                        r_ij[0] * sin(r_ij[1] + xi[2]),
+                        math.pi + r_ij[1] - r_ji[1]])
+
+        xi[2] = wrap_pi(xi[2])
+        xi[2], m_ij[2] = np.unwrap([xi[2], m_ij[2]])
+        
+        x_ji = xi + m_ij
+        x_ji[2] = wrap_pi(x_ji[2])
+
+
+        # calc relative uncertain
+        Fij = np.array([[ 1, 0, -r_ij[0] * sin(xi[2] + r_ij[1])],
+                        [ 0, 1,  r_ij[0] * cos(xi[2] + r_ij[1])],
+                        [ 0, 0,  1                             ]])
+
+        Sij = np.array([[ cos(xi[2]+r_ij[1]), -sin(xi[2]+r_ij[1]),  0],
+                        [ sin(xi[2]+r_ij[1]),  cos(xi[2]+r_ij[1]),  0],
+                        [                  0,                   1, -1]])
+        
+        _R_ij = np.diag([R_ij[0,0], R_ij[1,1], R_ji[1,1]])
+        
+        Pji = Fij.dot(Pi).dot(Fij.T) + Sij.dot(_R_ij).dot(Sij.T)
+
+        return x_ji, Pji
+
 
 
     # PREDICTION FUNCTIONS

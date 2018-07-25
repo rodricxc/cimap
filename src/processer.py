@@ -12,7 +12,7 @@ import pickle
 
 import robot
 
-
+ 
 class Solver(object):
     """docstring for Solver"""
 
@@ -39,7 +39,7 @@ class Solver(object):
         print("[cimap_processer]: Swarm Loaded")
 
         # calcualting odometry for all robots
-        odom_parameters = [0.01, 0.01, 0.01, 0.01]
+        odom_parameters = [0.005, 0.005, 0.005, 0.005]
         [r.calcOdometry(odom_parameters) for r in self.swarm]
         print("[cimap_processer]: Odometry processed")
 
@@ -48,7 +48,7 @@ class Solver(object):
 
         # set to use gps
         [r.useGps(False) for r in self.swarm]
-        [self.swarm[i].useGps(True) for i in {2,7}]
+        [self.swarm[i].useGps(True) for i in {0}]
 
 
         MAX_TIME = self._stop_time
@@ -79,6 +79,7 @@ class Solver(object):
 
             # DEBUG: Publiush calcs
             [r.publishPoses(t) for r in self.swarm[:]]
+            # [r.publishPoses(t) for r in self.swarm[4:8]]
             rospy.sleep(0.1)
             if rospy.is_shutdown():
                 return
