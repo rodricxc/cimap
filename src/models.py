@@ -1,5 +1,12 @@
 import numpy as np
 
+# Wrap the angle value between -pi and pi 
+def wrap_pi(a):
+    while a <= -np.pi:
+        a += 2*np.pi
+    while a > np.pi:
+        a -= 2*np.pi
+    return a 
 
 def sample_motion_model_odometry(u_t, x_t1, error, type_distrib='normal'):
     """
@@ -32,7 +39,7 @@ def sample_motion_model_odometry(u_t, x_t1, error, type_distrib='normal'):
 
     _x = x + delta_ch_trans * np.cos(theta + delta_ch_rot1)
     _y = y + delta_ch_trans * np.sin(theta + delta_ch_rot1)
-    _theta = theta + delta_ch_rot1 + delta_ch_rot2
+    _theta = wrap_pi(theta + delta_ch_rot1 + delta_ch_rot2)
 
     x_t = [_x, _y, _theta]
     return x_t

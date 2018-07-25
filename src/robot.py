@@ -7,6 +7,7 @@ import random
 import numpy as np
 import threading 
 import copy
+import collections
 import scipy.interpolate as interpolate
 from scipy import optimize
 
@@ -23,7 +24,7 @@ from sensor_msgs.msg import LaserScan
 
 # defining/renaming  some matematical functions
 cos, sin = np.cos, np.sin
-inv = np.linalg.pinv
+inv = np.linalg.inv
 det = np.linalg.det
 
 
@@ -49,6 +50,7 @@ class Robot(object):
         self.has_gps = False
         self._x_pred = np.zeros(3)
         self._P_pred = np.diag([1,1,1])
+        self._neightbour_update_list = collections.defaultdict(lambda: -999)
 
         # constants
         self._max_vel = 0.9
@@ -71,12 +73,14 @@ class Robot(object):
         self.has_gps = value
 
     def prepareToPickle(self):
+        self._neightbour_update_list = None
         for t, s in self._states.iteritems():
             s.setPreviousRobotState(None)
         self.state_lock = None
         
 
     def onPickleLoad(self):
+        self._neightbour_update_list = collections.defaultdict(lambda: -999)
         self.state_lock = threading.RLock()
         sorted_idx = [0]+sorted(self._states)
         for i in range(1,len(sorted_idx)):
@@ -247,7 +251,15 @@ class Robot(object):
     # OTHER
     def calcOdometry(self, odom_parameters):
         seq = self.state_time_sequence()
-        
+        i=1
+        while not self.getState(seq[i], insert=False).gt:
+            i+=1
+
+        while i>0:
+            s = self.getState(seq[i])
+            s.previous.gt = s.gt
+            i+=-1
+
         s1 = self.getState(seq[1])
         s0 = s1.previous
         s0.gt = s1.gt
@@ -257,12 +269,14 @@ class Robot(object):
         for t in seq:
             rs1 = self.getState(t)
             rs0 = rs1.previous
+            if rs1.gt is None:
+                rs1.gt = rs0.gt
             rs1.odom = State(m_odom([rs0.gt.mean, rs1.gt.mean], rs0.odom.mean, odom_parameters))
             rs1.filtered = rs1.odom
-
+        
 
     # UPDATE FUNCTIONS
-    def update(self, t, swarm, update_type='ci'):
+    def update(self, t, swarm, update_type='ci', perception_noise=None):
 
         current_state = self.getState(t, insert=False)
         if not current_state:
@@ -273,8 +287,11 @@ class Robot(object):
 
         # error expected on perception
         # R_ij = R_ji = np.diag([0.05, 0.05])
-        R_ij = R_ji = np.diag([0.01, 0.01])
-
+        if not perception_noise:
+            R_ij = R_ji = np.diag([0.05, 0.05])
+        else:
+            R_ij = R_ji = np.diag(perception_noise)
+            
         C = np.eye(3)
 
         # in case of using gps, update with kalman filter
@@ -302,9 +319,13 @@ class Robot(object):
                 x_cr, P_cr = swarm[cr_id].getPredicted()
                 close_j_robot = swarm[cr_id].getState(t,insert=False).close_robots[self.id]
 
-                x_meas, P_meas = self.calcRelativeState([close_j_robot.distance, close_j_robot.direction], R_ji,
-                                                        [close_i_robot.distance, close_i_robot.direction], R_ij, 
-                                                        x_cr, P_cr)
+                r_ji = np.random.multivariate_normal([close_j_robot.distance, close_j_robot.direction], R_ji)
+                r_ij = np.random.multivariate_normal([close_i_robot.distance, close_i_robot.direction], R_ij)
+
+                # pose that the other robot imagines that this one have
+                x_meas, P_meas = self.calcRelativeState(r_ji, R_ji,  # perceptions from this robot 
+                                                        r_ij, R_ij,  # perception from the other robot
+                                                        x_cr, P_cr)  # Pose estimation of the other robot given by the other robot
 
                 # make sure that the angles are in the closest form possible
                 x[2] = wrap_pi(x[2])
@@ -312,42 +333,50 @@ class Robot(object):
 
                 ## exchange with GPS robots
                 if swarm[cr_id].hasGps():
-                    
                     # Gain matrix
                     K = P.dot(C.T).dot(inv(C.dot(P).dot(C.T)+P_meas))
-
                     # update values and probabilities with gain
                     x = x + K.dot(x_meas - C.dot(x))
                     x[2] = wrap_pi(x[2])
                     P = (np.eye(3) - K.dot(C)).dot(P)
-
-
                 ## exchange with Non-GPS robot
                 else:
                     # CI update
                     if update_type=='ci':
-                        w = optimize.fminbound(lambda w : det(inv(inv(P) * w + inv(P_meas) * (1 - w))), 0, 1)
-                        # w = 0.5
+                        # w = optimize.fminbound(lambda w : det(inv(inv(P) * w + inv(P_meas) * (1 - w))), 0, 1)
+                        w = 0.5
 
                         P_ci = inv(inv(P) * w + inv(P_meas) * (1 - w))
-                        x_ci = P.dot(w * inv(P).dot(x) + (1 - w) * inv(P_meas).dot(x_meas))
+                        x_ci = P_ci.dot(w * inv(P).dot(x) + (1 - w) * inv(P_meas).dot(x_meas))
 
                         x_ci[2] = wrap_pi(x_ci[2])
 
                         P = P_ci
                         x = x_ci
 
-                    # kalman update non recursive
-                    else:
-                        pass
-                    
+                    # Kalman update non recursive
+                    elif update_type=='k':
+                        if t - self.lastUpdateFrom(cr_id) > 10:
+                            # Gain matrix
+                            K = P.dot(C.T).dot(inv(C.dot(P).dot(C.T)+P_meas))
+                            # update values and probabilities with gain
+                            x = x + K.dot(x_meas - C.dot(x))
+                            x[2] = wrap_pi(x[2])
+                            P = (np.eye(3) - K.dot(C)).dot(P)
+
+                            self.setUpdateFrom(cr_id, t)                    
             
             
 
         # save results on state
+        x[2] = wrap_pi(x[2])
         current_state.filtered = State(x, P)
 
-    
+    def lastUpdateFrom(self, neighbour_id):        
+        return self._neightbour_update_list[neighbour_id]
+
+    def setUpdateFrom(self, neighbour_id, t):
+        self._neightbour_update_list[neighbour_id] = t
 
 
     def calcRelativeState(self, r_ij, R_ij, r_ji, R_ji, xi, Pi):
