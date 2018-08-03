@@ -32,6 +32,9 @@ class Solver(object):
         self._stop_time = rospy.get_param("/stoptime", 60)
 
         self._map_resolution = rospy.get_param("/map_resolution", 0.1)
+        self._odom_err = rospy.get_param("/odom_error", 0.01)
+
+
         self._ranger_max = 1
         self._ranger_irm_side = int(
             2*(1+math.ceil(self._ranger_max/self._map_resolution))+1)
@@ -61,7 +64,7 @@ class Solver(object):
             try:
                 # gt 
                 pose = s.gt.mean
-                proportion = 0.003
+                proportion = 0.01
                 
                 rim = self.ranger_to_inverse_model(
                     ranges, 
@@ -73,7 +76,7 @@ class Solver(object):
 
                 # filtered 
                 pose = s.filtered.mean
-                area = det(s.filtered.cov[:2,:2])
+                area = np.log(det(s.filtered.cov[:2,:2])+1)
                 proportion = 0.03 * (self._map_resolution **2)/(1.0*area)
 
                 if proportion > 0.03:
@@ -149,7 +152,8 @@ class Solver(object):
         print("[cimap_processer]: Swarm Loaded")
 
         # calcualting odometry for all robots
-        odom_parameters = [0.01, 0.01, 0.01, 0.01]
+        odom_parameters = [self._odom_err, self._odom_err, self._odom_err, self._odom_err]
+        # odom_parameters = [0.005, 0.005, 0.005, 0.005]
         perception_noise = [0.05, 0.05]
 
 
@@ -171,6 +175,7 @@ class Solver(object):
             if int(t*10)%10 == 0:            
                 print('at time %5.2f'%t)
                 self.publish_maps()
+                rospy.sleep(0.05)
             ## PREDICTION STEP
             # -> calc estimator of controls AND
             #    estimate error matrix of control
@@ -204,8 +209,12 @@ class Solver(object):
 
             # time increase
             t+=0.1
+        
+        print "mapping finished"
+        while not rospy.is_shutdown():
+            rospy.sleep(1)
+            self.publish_maps()
 
-        rospy.sleep(10)
         # end 
 
 

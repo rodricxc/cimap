@@ -5,12 +5,16 @@
     <arg name="map" default="simple8" />  <!-- map used on simulation-->
     <arg name="experiment_id" default="0" /> 
     <arg name="stoptime" default="300" /> 
+    <arg name="map_resolution" default="0.1" /> 
+    <arg name="odom_error" default="0.01" /> 
 
     <param name="num_robots" type="int" value="$(arg num_robots)" />
     <param name="stoptime" type="int" value="$(arg stoptime)" />
     <param name="experiment_id" type="int" value="$(arg experiment_id)" />
     <param name="robot_prerception_distance" type="double" value="$(arg robot_prerception_distance)" />
     <param name="map_name" type="str" value="$(arg map)" />
+    <param name="map_resolution" type="double" value="$(arg map_resolution)" />
+    <param name="odom_error" type="double" value="$(arg odom_error)" />
 
 
     <!-- RVIZ -->

@@ -1,0 +1,127 @@
+# simple_pioneer.world - basic world file example using pretty models
+# Authors: Richard Vaughan
+# $Id$
+
+include "car.inc"
+#include "swarm.inc"
+include "turtlebot.inc"
+include "map.inc"
+#include "sick.inc"
+
+paused 1
+
+# simulate as fast as possible
+# interval_real 1   
+speedup 0.200
+
+
+
+ 
+
+# configure the GUI window
+window (
+  size [ 800 716 ] # in pixels
+  scale 30.000   # pixels per meter
+  center [ 0.033  0.333 ]
+  rotate [ 0.000  0.000 ]
+
+  			
+  show_data 1              # 1=on 0=off
+  show_flags 0
+  show_blocks 1
+  show_clock 1
+  show_footprints 0
+  show_grid 0
+  show_trailarrows 0
+  show_trailrise 0
+  show_trailfast 0
+  show_occupancy 0
+  show_tree 1
+  pcam_on 0
+  screenshots 0
+
+)
+
+# load an environment bitmap
+floorplan (
+  name "cave"
+  bitmap "maps/room_1_obs.png"
+  size [32.000 32.000 0.800]
+  pose [0.000 0.000 0.000 0.000]
+  boundary 1
+)
+
+turtlebot( pose [ -2.00 -5.00  0.000 0.000 ] name "rob00" color "blue" )
+turtlebot( pose [ -3.00 -4.00  0.000 0.000 ] name "rob01" color "blue" )
+turtlebot( pose [ -3.00 -5.00  0.000 0.000 ] name "rob02" color "blue" )
+turtlebot( pose [ -3.00 -6.00  0.000 0.000 ] name "rob03" color "blue" )
+turtlebot( pose [ -3.00 -7.00  0.000 0.000 ] name "rob04" color "blue" )
+turtlebot( pose [ -3.00 -8.00  0.000 0.000 ] name "rob05" color "blue" )
+turtlebot( pose [ -3.00 -9.00  0.000 0.000 ] name "rob06" color "blue" )
+turtlebot( pose [ -3.00 -10.00  0.000 0.000 ] name "rob07" color "blue" )
+
+turtlebot( pose [ -4.00 -3.00  0.000 0.000 ] name "rob08" color "blue" )
+turtlebot( pose [ -4.00 -4.00  0.000 0.000 ] name "rob09" color "blue" )
+turtlebot( pose [ -4.00 -5.00  0.000 0.000 ] name "rob10" color "blue" )
+turtlebot( pose [ -4.00 -6.00  0.000 0.000 ] name "rob11" color "blue" )
+turtlebot( pose [ -4.00 -7.00  0.000 0.000 ] name "rob12" color "blue" )
+turtlebot( pose [ -4.00 -8.00  0.000 0.000 ] name "rob13" color "blue" )
+turtlebot( pose [ -4.00 -9.00  0.000 0.000 ] name "rob14" color "blue" )
+turtlebot( pose [ -4.00 -10.00  0.000 0.000 ] name "rob15" color "blue" )
+
+turtlebot( pose [ -5.00 -3.00  0.000 0.000 ] name "rob16" color "blue" )
+turtlebot( pose [ -5.00 -4.00  0.000 0.000 ] name "rob17" color "blue" )
+turtlebot( pose [ -5.00 -5.00  0.000 0.000 ] name "rob18" color "blue" )
+turtlebot( pose [ -5.00 -6.00  0.000 0.000 ] name "rob19" color "blue" )
+turtlebot( pose [ -5.00 -7.00  0.000 0.000 ] name "rob20" color "blue" )
+turtlebot( pose [ -5.00 -8.00  0.000 0.000 ] name "rob21" color "blue" )
+turtlebot( pose [ -5.00 -9.00  0.000 0.000 ] name "rob22" color "blue" )
+turtlebot( pose [ -5.00 -10.00  0.000 0.000 ] name "rob23" color "blue" )
+
+turtlebot( pose [ -6.00 -3.00  0.000 0.000 ] name "rob24" color "blue" )
+turtlebot( pose [ -6.00 -4.00  0.000 0.000 ] name "rob25" color "blue" )
+turtlebot( pose [ -6.00 -5.00  0.000 0.000 ] name "rob26" color "blue" )
+turtlebot( pose [ -6.00 -6.00  0.000 0.000 ] name "rob27" color "blue" )
+turtlebot( pose [ -6.00 -7.00  0.000 0.000 ] name "rob28" color "blue" )
+turtlebot( pose [ -6.00 -8.00  0.000 0.000 ] name "rob29" color "blue" )
+turtlebot( pose [ -6.00 -9.00  0.000 0.000 ] name "rob30" color "blue" )
+turtlebot( pose [ -6.00 -10.00  0.000 0.000 ] name "rob31" color "blue" )
+
+turtlebot( pose [ -7.00 -3.00  0.000 0.000 ] name "rob32" color "blue" )
+turtlebot( pose [ -7.00 -4.00  0.000 0.000 ] name "rob33" color "blue" )
+turtlebot( pose [ -7.00 -5.00  0.000 0.000 ] name "rob34" color "blue" )
+turtlebot( pose [ -7.00 -6.00  0.000 0.000 ] name "rob35" color "blue" )
+turtlebot( pose [ -7.00 -7.00  0.000 0.000 ] name "rob36" color "blue" )
+turtlebot( pose [ -7.00 -8.00  0.000 0.000 ] name "rob37" color "blue" )
+turtlebot( pose [ -7.00 -9.00  0.000 0.000 ] name "rob38" color "blue" )
+turtlebot( pose [ -7.00 -10.00  0.000 0.000 ] name "rob39" color "blue" )
+
+turtlebot( pose [ -8.00 -3.00  0.000 0.000 ] name "rob40" color "blue" )
+turtlebot( pose [ -8.00 -4.00  0.000 0.000 ] name "rob41" color "blue" )
+turtlebot( pose [ -8.00 -5.00  0.000 0.000 ] name "rob42" color "blue" )
+turtlebot( pose [ -8.00 -6.00  0.000 0.000 ] name "rob43" color "blue" )
+turtlebot( pose [ -8.00 -7.00  0.000 0.000 ] name "rob44" color "blue" )
+turtlebot( pose [ -8.00 -8.00  0.000 0.000 ] name "rob45" color "blue" )
+turtlebot( pose [ -8.00 -9.00  0.000 0.000 ] name "rob46" color "blue" )
+turtlebot( pose [ -8.00 -10.00  0.000 0.000 ] name "rob47" color "blue" )
+
+turtlebot( pose [ -9.00 -3.00  0.000 0.000 ] name "rob48" color "blue" )
+turtlebot( pose [ -9.00 -4.00  0.000 0.000 ] name "rob49" color "blue" )
+turtlebot( pose [ -9.00 -5.00  0.000 0.000 ] name "rob50" color "blue" )
+turtlebot( pose [ -9.00 -6.00  0.000 0.000 ] name "rob51" color "blue" )
+turtlebot( pose [ -9.00 -7.00  0.000 0.000 ] name "rob52" color "blue" )
+turtlebot( pose [ -9.00 -8.00  0.000 0.000 ] name "rob53" color "blue" )
+turtlebot( pose [ -9.00 -9.00  0.000 0.000 ] name "rob54" color "blue" )
+turtlebot( pose [ -9.00 -10.00  0.000 0.000 ] name "rob55" color "blue" )
+
+turtlebot( pose [ -10.00 -3.00  0.000 0.000 ] name "rob56" color "blue" )
+turtlebot( pose [ -10.00 -4.00  0.000 0.000 ] name "rob57" color "blue" )
+turtlebot( pose [ -10.00 -5.00  0.000 0.000 ] name "rob58" color "blue" )
+turtlebot( pose [ -10.00 -6.00  0.000 0.000 ] name "rob59" color "blue" )
+turtlebot( pose [ -10.00 -7.00  0.000 0.000 ] name "rob60" color "blue" )
+turtlebot( pose [ -10.00 -8.00  0.000 0.000 ] name "rob61" color "blue" )
+turtlebot( pose [ -10.00 -9.00  0.000 0.000 ] name "rob62" color "blue" )
+turtlebot( pose [ -10.00 -10.00  0.000 0.000 ] name "rob63" color "blue" )
+
+
+turtlebot( pose [  100.000  100.000 0.000 0.000 ] name "rob9999999" color "yellow" )
