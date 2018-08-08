@@ -1,0 +1,71 @@
+<launch>
+
+	<arg name="robot_address7" value="10:00:E8:6C:D7:E6"/>	<!--1589--> <!-- 7 -->
+	<arg name="robot_address3" value="10:00:E8:52:A9:69"/>	<!--1107--> <!-- 3 -->
+	<arg name="robot_address6" value="10:00:E8:6C:EC:A7"/>	<!--1553--> <!-- 6 -->
+	
+	<param name="robot_description" textfile="$(find epuck_driver)/urdf/epuck_urdf.xml"/>
+
+	<!--group ns="robot_7">
+		<include file="$(find epuck_driver)/launch/epuck_controller.launch">
+			<arg name="epuck_address" value="$(arg robot_address7)"/>
+			<arg name="epuck_name" value="robot_7"/>
+			<arg name="cam_en" value="false"/>
+    		<arg name="acc_en" value="false"/>
+    		<arg name="prox_en" value="true"/>
+			<arg name="mot_pos_en" value="true"/>
+			<arg name="light_en" value="false"/>
+			<arg name="floor_en" value="false"/>
+			<arg name="sel_en" value="false"/> 
+			<arg name="mot_speed_en" value="false"/>
+			<arg name="mic_en" value="false"/>
+			<arg name="xpos" value="0.0"/>
+			<arg name="ypos" value="0.0"/>
+			<arg name="theta" value="0.0"/>
+			<arg name="is_single_robot" value="0"/>
+		</include>
+	</group-->
+
+	<!--group ns="robot_3">
+		<include file="$(find epuck_driver)/launch/epuck_controller.launch">
+			<arg name="epuck_address" value="$(arg robot_address3)"/>
+			<arg name="epuck_name" value="robot_3"/>
+			<arg name="cam_en" value="false"/>
+    		<arg name="acc_en" value="false"/>
+    		<arg name="prox_en" value="true"/>
+			<arg name="mot_pos_en" value="true"/>
+			<arg name="light_en" value="false"/>
+			<arg name="floor_en" value="false"/>
+			<arg name="sel_en" value="false"/>
+			<arg name="mot_speed_en" value="false"/>
+			<arg name="mic_en" value="false"/>
+			<arg name="xpos" value="0.0"/>
+			<arg name="ypos" value="0.0"/>
+			<arg name="theta" value="0.0"/>
+			<arg name="is_single_robot" value="0"/>
+		</include>
+	</group-->
+
+	<group ns="robot_6">
+		<include file="$(find epuck_driver)/launch/epuck_controller.launch">
+			<arg name="epuck_address" value="$(arg robot_address6)"/>
+			<arg name="epuck_name" value="robot_6"/>
+			<arg name="cam_en" value="false"/>
+    		<arg name="acc_en" value="false"/>
+    		<arg name="prox_en" value="true"/>
+			<arg name="mot_pos_en" value="true"/>
+			<arg name="light_en" value="false"/>
+			<arg name="floor_en" value="false"/>
+			<arg name="sel_en" value="false"/>
+			<arg name="mot_speed_en" value="false"/>
+			<arg name="mic_en" value="false"/>
+			<arg name="xpos" value="0.0"/>
+			<arg name="ypos" value="0.0"/>
+			<arg name="theta" value="0.0"/>
+			<arg name="is_single_robot" value="0"/>
+		</include>
+	</group>
+
+	<!--node pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find epuck_driver)/config/multi_epuck_driver_rviz.rviz"/-->
+
+</launch>
