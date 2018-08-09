@@ -138,7 +138,7 @@ class Mapa(object):
         ts[a10[0], a10[1]:a11[1]] = 1
         return ts.T
 
-    def plotMapa(self, path=None, round_at=None):
+    def plotMapa(self, path=None, round_at=None, axis=None):
 
         s = np.copy(self.grid.T)
         if round_at is not None:
@@ -147,19 +147,25 @@ class Mapa(object):
             s[(s > 0) & (s < 1)] = 0.5
             
         s[0, 0], s[1, 0] = 1, 0
-        figure = plt.figure(figsize=(15, 15))
-        plt.matshow(s, cmap=plt.cm.binary, origin='lower', fignum=1)
-        plt.grid(False)
-        plt.title(self.map_name)
-        plt.xticks(np.arange(0, self.dimensions[0], step=self.dimensions[0]//5), np.arange(
-            self.interval[0, 0], self.interval[0, 1], step=(self.interval[0, 1]-self.interval[0, 0])//5))
-        plt.yticks(np.arange(0, self.dimensions[1], step=self.dimensions[1]//5), np.arange(
-            self.interval[1, 0], self.interval[1, 1], step=(self.interval[1, 1]-self.interval[1, 0])//5))
+        figure = plt.figure(num=self.map_name,figsize=(10, 10))
+        # plt.matshow(s, cmap=plt.cm.binary, origin='lower', fignum=1)
+
+        plt.imshow(s, aspect='equal', origin='lower', cmap='gray_r', zorder=0, extent=[self.interval[0, 0], self.interval[0, 1],self.interval[1, 0], self.interval[1, 1]])
+        
+        if axis is not None:
+            plt.axis(axis)
+
         if path is not None:
             plt.draw()
-            plt.savefig(path)
+            plt.savefig(path,bbox_inches='tight')
         else:
-            plt.show()
+
+            plt.show(block=False)
+            plt.pause(0.01)
+
+
+        
+
         # plt.close(figure)
 
 
