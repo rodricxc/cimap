@@ -8,8 +8,9 @@ Panels:
         - /Grid1
         - /Marker1/Namespaces1
         - /TF1
+        - /Odometry1
       Splitter Ratio: 0.744186044
-    Tree Height: 843
+    Tree Height: 663
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -65,70 +66,38 @@ Visualization Manager:
         All Enabled: false
         ar_marker_0:
           Value: true
-        ar_marker_3:
+        ar_marker_44:
           Value: true
         ar_marker_6:
-          Value: true
-        ar_marker_7:
           Value: true
         head_camera:
           Value: true
         odom:
           Value: true
-        robot_3/base_link:
+        robot_real_6/base_link:
           Value: true
-        robot_3/base_prox0:
-          Value: false
-        robot_3/base_prox1:
-          Value: false
-        robot_3/base_prox2:
-          Value: false
-        robot_3/base_prox3:
-          Value: false
-        robot_3/base_prox4:
-          Value: false
-        robot_3/base_prox5:
-          Value: false
-        robot_3/base_prox6:
-          Value: false
-        robot_3/base_prox7:
-          Value: false
-        robot_6/base_link:
+        robot_real_6/base_prox0:
           Value: true
-        robot_6/base_prox0:
-          Value: false
-        robot_6/base_prox1:
-          Value: false
-        robot_6/base_prox2:
-          Value: false
-        robot_6/base_prox3:
-          Value: false
-        robot_6/base_prox4:
-          Value: false
-        robot_6/base_prox5:
-          Value: false
-        robot_6/base_prox6:
-          Value: false
-        robot_6/base_prox7:
-          Value: false
-        robot_7/base_link:
+        robot_real_6/base_prox1:
           Value: true
-        robot_7/base_prox0:
-          Value: false
-        robot_7/base_prox1:
-          Value: false
-        robot_7/base_prox2:
-          Value: false
-        robot_7/base_prox3:
-          Value: false
-        robot_7/base_prox4:
-          Value: false
-        robot_7/base_prox5:
-          Value: false
-        robot_7/base_prox6:
-          Value: false
-        robot_7/base_prox7:
-          Value: false
+        robot_real_6/base_prox2:
+          Value: true
+        robot_real_6/base_prox3:
+          Value: true
+        robot_real_6/base_prox4:
+          Value: true
+        robot_real_6/base_prox5:
+          Value: true
+        robot_real_6/base_prox6:
+          Value: true
+        robot_real_6/base_prox7:
+          Value: true
+        robot_real_6/body_top:
+          Value: true
+        robot_real_6/left_wheel:
+          Value: true
+        robot_real_6/right_wheel:
+          Value: true
         world:
           Value: true
       Marker Scale: 0.300000012
@@ -141,63 +110,33 @@ Visualization Manager:
           head_camera:
             ar_marker_0:
               {}
-            ar_marker_3:
+            ar_marker_44:
               {}
             ar_marker_6:
               {}
-            ar_marker_7:
-              {}
           odom:
-            robot_3/base_link:
-              robot_3/base_prox0:
+            robot_real_6/base_link:
+              robot_real_6/base_prox0:
                 {}
-              robot_3/base_prox1:
+              robot_real_6/base_prox1:
                 {}
-              robot_3/base_prox2:
+              robot_real_6/base_prox2:
                 {}
-              robot_3/base_prox3:
+              robot_real_6/base_prox3:
                 {}
-              robot_3/base_prox4:
+              robot_real_6/base_prox4:
                 {}
-              robot_3/base_prox5:
+              robot_real_6/base_prox5:
                 {}
-              robot_3/base_prox6:
+              robot_real_6/base_prox6:
                 {}
-              robot_3/base_prox7:
+              robot_real_6/base_prox7:
                 {}
-            robot_6/base_link:
-              robot_6/base_prox0:
+              robot_real_6/body_top:
                 {}
-              robot_6/base_prox1:
+              robot_real_6/left_wheel:
                 {}
-              robot_6/base_prox2:
-                {}
-              robot_6/base_prox3:
-                {}
-              robot_6/base_prox4:
-                {}
-              robot_6/base_prox5:
-                {}
-              robot_6/base_prox6:
-                {}
-              robot_6/base_prox7:
-                {}
-            robot_7/base_link:
-              robot_7/base_prox0:
-                {}
-              robot_7/base_prox1:
-                {}
-              robot_7/base_prox2:
-                {}
-              robot_7/base_prox3:
-                {}
-              robot_7/base_prox4:
-                {}
-              robot_7/base_prox5:
-                {}
-              robot_7/base_prox6:
-                {}
-              robot_7/base_prox7:
+              robot_real_6/right_wheel:
                 {}
       Update Interval: 0
       Value: true
@@ -232,43 +171,9 @@ Visualization Manager:
         Shaft Length: 0.100000001
         Shaft Radius: 0.00499999989
         Value: Arrow
-      Topic: /robot_3/odom
+      Topic: /robot_0/odom
       Unreliable: false
       Value: true
-    - Angle Tolerance: 0.100000001
-      Class: rviz/Odometry
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
-          Value: true
-        Position:
-          Alpha: 0.300000012
-          Color: 204; 51; 204
-          Scale: 1
-          Value: true
-        Value: true
-      Enabled: false
-      Keep: 100
-      Name: Odometry
-      Position Tolerance: 0.100000001
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.100000001
-        Color: 255; 25; 0
-        Head Length: 0.0299999993
-        Head Radius: 0.00999999978
-        Shaft Length: 0.100000001
-        Shaft Radius: 0.00499999989
-        Value: Arrow
-      Topic: /robot_6/odom
-      Unreliable: false
-      Value: false
     - Angle Tolerance: 0.100000001
       Class: rviz/Odometry
       Covariance:
@@ -300,7 +205,41 @@ Visualization Manager:
         Shaft Length: 0.100000001
         Shaft Radius: 0.00499999989
         Value: Arrow
-      Topic: /robot_7/odom
+      Topic: /robot_real_6/odom
+      Unreliable: false
+      Value: true
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.300000012
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 100
+      Name: Odometry
+      Position Tolerance: 0.100000001
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.100000001
+        Color: 255; 25; 0
+        Head Length: 0.0299999993
+        Head Radius: 0.00999999978
+        Shaft Length: 0.100000001
+        Shaft Radius: 0.00499999989
+        Value: Arrow
+      Topic: /robot_real_7/odom
       Unreliable: false
       Value: true
   Enabled: true
@@ -328,7 +267,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 1.9623369
+      Distance: 2.62070203
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -343,18 +282,18 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.43979645
+      Pitch: 0.104798079
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 3.64856529
+      Yaw: 0.380375385
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1056
+  Height: 876
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a000003dafc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000028000003da000000dd00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000003dafc0200000004fb0000000a005600690065007700730100000028000003da000000b000fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0049006d0061006700650100000304000002d60000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005a00000003efc0100000002fb0000000800540069006d00650000000000000005a00000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000004fb000003da00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000001f700000326fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000002800000326000000d700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f00000326fc0200000004fb0000000a00560069006500770073010000002800000326000000ad00fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0049006d0061006700650100000304000002d60000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005a00000003efc0100000002fb0000000800540069006d00650000000000000005a00000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000002ed0000032600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -363,6 +302,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1920
-  X: 0
+  Width: 1535
+  X: 65
   Y: 24

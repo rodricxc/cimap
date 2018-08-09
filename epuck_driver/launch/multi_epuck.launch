@@ -9,7 +9,7 @@
 	<!--group ns="robot_7">
 		<include file="$(find epuck_driver)/launch/epuck_controller.launch">
 			<arg name="epuck_address" value="$(arg robot_address7)"/>
-			<arg name="epuck_name" value="robot_7"/>
+			<arg name="epuck_name" value="robot_real_7"/>
 			<arg name="cam_en" value="false"/>
     		<arg name="acc_en" value="false"/>
     		<arg name="prox_en" value="true"/>
@@ -29,7 +29,7 @@
 	<!--group ns="robot_3">
 		<include file="$(find epuck_driver)/launch/epuck_controller.launch">
 			<arg name="epuck_address" value="$(arg robot_address3)"/>
-			<arg name="epuck_name" value="robot_3"/>
+			<arg name="epuck_name" value="robot_real_3"/>
 			<arg name="cam_en" value="false"/>
     		<arg name="acc_en" value="false"/>
     		<arg name="prox_en" value="true"/>
@@ -46,10 +46,10 @@
 		</include>
 	</group-->
 
-	<group ns="robot_6">
+	<group ns="robot_real_6">
 		<include file="$(find epuck_driver)/launch/epuck_controller.launch">
 			<arg name="epuck_address" value="$(arg robot_address6)"/>
-			<arg name="epuck_name" value="robot_6"/>
+			<arg name="epuck_name" value="robot_real_6"/>
 			<arg name="cam_en" value="false"/>
     		<arg name="acc_en" value="false"/>
     		<arg name="prox_en" value="true"/>
