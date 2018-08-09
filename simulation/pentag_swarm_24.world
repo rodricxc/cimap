@@ -1,0 +1,84 @@
+# simple_pioneer.world - basic world file example using pretty models
+# Authors: Richard Vaughan
+# $Id$
+
+include "car.inc"
+#include "swarm.inc"
+include "turtlebot.inc"
+include "map.inc"
+#include "sick.inc"
+
+paused 1
+
+# simulate as fast as possible
+# interval_real 1   
+speedup 1
+
+
+
+ 
+
+# configure the GUI window
+window (
+  size [ 800 716 ] # in pixels
+  scale 33.000   # pixels per meter
+  center [ 1.019  -0.771 ]
+  rotate [ 1.500  0.000 ]
+
+  			
+  show_data 1              # 1=on 0=off
+  show_flags 0
+  show_blocks 1
+  show_clock 1
+  show_footprints 0
+  show_grid 0
+  show_trailarrows 0
+  show_trailrise 0
+  show_trailfast 0
+  show_occupancy 0
+  show_tree 1
+  pcam_on 0
+  screenshots 0
+
+)
+
+# load an environment bitmap
+floorplan (
+  name "cave"
+  bitmap "maps/pentag.png"
+  size [16.000 16.000 0.800]
+  pose [0.000 0.000 0.000 0.000]
+  boundary 1
+)
+
+turtlebot( pose [  -1.610  -4.129 0.000 0.000 ] name "rob00" color "yellow" )
+turtlebot( pose [ -4.178  -6.901 0.000 0.000 ] name "rob01" color "blue" )
+turtlebot( pose [ -4.694  -4.806 0.000 0.000 ] name "rob02" color "red" )
+turtlebot( pose [ -3.175  -6.713 0.000 0.000 ] name "rob03" color "green" )
+
+turtlebot( pose [  -4.145 -5.274 0.000 0.000 ] name "rob04" color "yellow" )
+turtlebot( pose [ -2.678 -7.213 0.000 0.000 ] name "rob05" color "blue" )
+turtlebot( pose [ -3.575 -4.967 0.000 0.000 ] name "rob06" color "red" )
+turtlebot( pose [ -4.559 -5.973 0.000 0.000 ] name "rob07" color "green" )
+
+turtlebot( pose [  -1.485 -6.338 0.000 0.000 ] name "rob08" color "yellow" )
+turtlebot( pose [ -1.754 -7.062 0.000 0.000 ] name "rob09" color "blue" )
+turtlebot( pose [ -2.189 -3.470 0.000 0.000 ] name "rob10" color "red" )
+turtlebot( pose [ -3.132 -4.171 0.000 0.000 ] name "rob11" color "green" )
+
+turtlebot( pose [  -0.614 -5.016 0.000 0.000 ] name "rob12" color "yellow" )
+turtlebot( pose [ -2.425 -6.235 0.000 0.000 ] name "rob13" color "blue" )
+turtlebot( pose [ -2.294 -4.620 0.000 0.000 ] name "rob14" color "red" )
+turtlebot( pose [ -2.707 -3.618 0.000 0.000 ] name "rob15" color "green" )
+
+turtlebot( pose [  -0.178 -5.743 0.000 0.000 ] name "rob16" color "yellow" )
+turtlebot( pose [ -2.855 -5.413 0.000 0.000 ] name "rob17" color "blue" )
+turtlebot( pose [ -4.324 -4.318 0.000 0.000 ] name "rob18" color "red" )
+turtlebot( pose [ -3.689 -3.705 0.000 0.000 ] name "rob19" color "green" )
+
+turtlebot( pose [  -0.473 -6.408 0.000 0.000 ] name "rob20" color "yellow" )
+turtlebot( pose [ -0.919 -5.596 0.000 0.000 ] name "rob21" color "blue" )
+turtlebot( pose [ -1.496 -5.121 0.000 0.000 ] name "rob22" color "red" )
+turtlebot( pose [ -3.654 -5.929 0.000 0.000 ] name "rob23" color "green" )
+
+turtlebot( pose [  100.000  100.000 0.000 0.000 ] name "rob9999999" color "yellow" )

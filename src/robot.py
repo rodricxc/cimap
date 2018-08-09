@@ -52,6 +52,8 @@ class Robot(object):
         self._P_pred = np.diag([1,1,1])
         self._neightbour_update_list = collections.defaultdict(lambda: -999)
 
+        self._processed = False
+
         # constants
         self._max_vel = 0.9
         self._max_vel_ang = np.pi/2.0
@@ -64,6 +66,12 @@ class Robot(object):
     @property
     def id(self):
         return self.numero
+
+    def isProcessed(self):
+        return self._processed
+
+    def setProcessed(self, value):
+        self._processed = value
 
     def hasGps(self):
         return self.has_gps
@@ -142,8 +150,11 @@ class Robot(object):
     def stopPosePublishers(self):
         self.pose_publishing = False
         self.pub_pose_gt.unregister()
+        self.pub_pose_gt = None
         self.pub_pose_odom.unregister()
+        self.pub_pose_odom = None
         self.pub_pose_filtered.unregister()
+        self.pub_pose_filtered = None
 
     def publishPoses(self, t):
         state = self.getState(t,insert=False)

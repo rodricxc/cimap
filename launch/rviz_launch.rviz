@@ -1142,7 +1142,7 @@ Visualization Manager:
               Value: true
           Enabled: true
           Name: Robot Poses 24+ [ERROR]
-      Enabled: true
+      Enabled: false
       Name: ERROR
     - Class: rviz/Group
       Displays:
@@ -2248,7 +2248,7 @@ Visualization Manager:
               Value: true
           Enabled: true
           Name: Robot Poses 24+ [IDEAL]
-      Enabled: true
+      Enabled: false
       Name: IDEAL
     - Class: rviz/Group
       Displays:
@@ -3354,7 +3354,7 @@ Visualization Manager:
               Value: true
           Enabled: true
           Name: Robot Poses 24+ [FILTER]
-      Enabled: true
+      Enabled: false
       Name: FILTERED
     - Class: rviz/Group
       Displays:
@@ -3551,22 +3551,22 @@ Visualization Manager:
           Class: rviz/Map
           Color Scheme: map
           Draw Behind: true
-          Enabled: true
+          Enabled: false
           Name: Map [IDEAL]
           Topic: /map_server_ideal/map
           Unreliable: false
           Use Timestamp: false
-          Value: true
+          Value: false
         - Alpha: 1
           Class: rviz/Map
           Color Scheme: map
           Draw Behind: true
-          Enabled: false
+          Enabled: true
           Name: Map [FILTER]
           Topic: /map_server_filtered/map
           Unreliable: false
           Use Timestamp: false
-          Value: false
+          Value: true
         - Alpha: 1
           Class: rviz/Map
           Color Scheme: map
