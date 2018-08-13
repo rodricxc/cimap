@@ -13,6 +13,8 @@ import pickle
 import robot
 
 
+from std_msgs.msg import Bool
+
 class Solver(object):
     """docstring for Solver"""
 
@@ -27,6 +29,15 @@ class Solver(object):
         self._map_name = rospy.get_param("/map_name", 'default')
         self.swarm = [robot.Robot(i) for i in range(self._num_robots)]
         self.stoptime = rospy.get_param("/stoptime", 60)
+        self.stop = False
+        self.sub_stopper = rospy.Subscriber("/stop_all", Bool, self.stopSim)
+
+    def stopSim(self, data):
+        print 'stoping simulation'
+        self.stop = True
+        [r.stop() for r in self.swarm]
+        self.rate.sleep()
+        self.rate.sleep()
 
 
     def run(self):
@@ -42,21 +53,27 @@ class Solver(object):
         # start robots
         [r.start() for r in self.swarm]
         [r.useGps(False) for r in self.swarm]
+        print 'here'
 
-        while not rospy.is_shutdown():
+        while not rospy.is_shutdown() and not self.stop:
             now = rospy.get_rostime()
             # stop after k seconds
-            if now.secs >= self.stoptime:
-                [r.stop() for r in self.swarm]
-                self.rate.sleep()
-                self.rate.sleep()
-                break
+            # if now.secs >= self.stoptime:
+            #     [r.stop() for r in self.swarm]
+            #     self.rate.sleep()
+            #     self.rate.sleep()
+            #     break
 
             self.rate.sleep()
 
-        self.calcAllHits()
-    
-        self.saveSwarm()
+        # self.calcAllHits()
+        # [r.stop() for r in self.swarm]
+        
+        if not  rospy.is_shutdown() :
+
+            self.calcAllHits()
+
+            self.saveSwarm()
 
 
 

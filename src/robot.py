@@ -55,11 +55,14 @@ class Robot(object):
         self._processed = False
 
         # constants
-        self._max_vel = 0.9
+        self._max_vel = 1.5
         self._max_vel_ang = np.pi/2.0
         self.started = False
         self.min_hit_direction = 0.8
         self.follow_wall_maxtime = 5
+
+
+        self.last_pose = None
 
         print "[Status]: Starting robot named: ", self.nome
 
@@ -121,15 +124,25 @@ class Robot(object):
                 
             self._states[timestamp] = RobotState(timestamp=timestamp)
             self._states[timestamp].setPreviousRobotState(self._lastState)
-            # if timestamp > self._lastState.time:
-            #     self._lastState = self._states[timestamp]
+            if timestamp > self._lastState.time:
+                self._lastState = self._states[timestamp]
         self.state_lock.release()
         return self._states[timestamp]
+
+    def getLastPose(self):
+        s = self.getState()
+        c=5
+        while s.gt is None and c > 0:
+            s= s.previous
+            c-=1
+            if c <=0:
+                return [0,0,0]
+        return s.gt.mean
 
     def initRosCom(self):
         self.unregistered = False
         self.pub_cmd_vel = rospy.Publisher('/' + self.nome + '/cmd_vel', Twist, queue_size=10)
-        self.sub_base_pose_ground_truth = rospy.Subscriber("/" + self.nome + "/base_pose_ground_truth", Odometry, self.updateBasePose)
+        self.sub_base_pose_ground_truth = rospy.Subscriber("/" + self.nome + "/base_pose_ground_truth", Odometry, self.updateBasePoseNonSync)
         self.sub_base_scan = rospy.Subscriber("/" + self.nome + "/base_scan", LaserScan, self.updateLaser)
 
     def stopRosComunicacao(self):
@@ -138,7 +151,7 @@ class Robot(object):
 
         self.sub_base_scan.unregister()
         self.sub_base_pose_ground_truth.unregister()
-        self.pub_cmd_vel.unregister()
+        # self.pub_cmd_vel.unregister()
 
     def initPosePublishers(self):
         self.pub_pose_gt = rospy.Publisher('/' + self.nome + '/pose_gt_with_cov', PoseWithCovarianceStamped, queue_size=1)
@@ -205,8 +218,12 @@ class Robot(object):
         self.started = True
    
     def stop(self):
+        print 'stoping robot %d' % self.id
+        self.started = True
+        self.sendVelocities(vel=[0, 0, 0])
+        self.sendVelocities(vel=[0, 0, 0])
+        self.sendVelocities(vel=[0, 0, 0])
         self.started = False
-        self.sendVelocities()
         self.stopRosComunicacao()
 
     # Function to publish velocity
@@ -234,15 +251,26 @@ class Robot(object):
 
         # trigger finished
         current_state.setLaserFinished(True)
+
+        if self.last_pose is not None:
+            self.last_pose.header.stamp = data.header.stamp
+            self.updateBasePose(self.last_pose)
+
         self.runOnCalbackFinished(current_state)
 
 
     #### POSE
+    def updateBasePoseNonSync(self, data):
+        self.last_pose = data
+    
     def updateBasePose(self, data):
         if self.unregistered:
             return
 
         current_state = self.getState(data.header.stamp)
+
+        if self.id==0:
+            print current_state.time
 
         # GT update
         _, _, yaw = self.oriToEuler(data.pose.pose.orientation)
@@ -508,7 +536,7 @@ class Robot(object):
             hit_dif =   wrap_pi(robot_state.hit_direction + robot_state.yaw_gt  - self.randomDirection)
 
             
-            if robot_state.hit_distance < 0.5 :
+            if robot_state.hit_distance < 0.05 :
                 self.randomDirection = robot_state.hit_direction + robot_state.yaw_gt + 0.75 * np.pi + random.random() * np.pi*0.5    
                 
             elif abs(hit_dif) < np.pi/3.0: 
@@ -639,7 +667,7 @@ class Robot(object):
 
 
     def verifyHits(self, current_state):
-        if self.willHit(current_state, required=0.8):
+        if self.willHit(current_state, required=0.09):
             self.storeHitPos(current_state)
             hitting = True
         else:
@@ -663,7 +691,7 @@ class Robot(object):
         angmin = x[argmin]
         return angmin, f(angmin)
 
-    def willHit(self, current_state, required=0.667):
+    def willHit(self, current_state, required=0.08):
         if np.any(current_state.laser <= required) :
             return True
         return False
@@ -700,12 +728,12 @@ def r_distance(r1, r2, time):
 
 
 def stamptostr(stamp):
-    return "%.2f" % stamptofloat(stamp)
+    return "%.1f" % stamptofloat(stamp)
 
 def stamptofloat(stamp):
     if  isinstance(stamp, (float,int,)):
-        return np.round(stamp,decimals=2)
-    return np.round(stamp.secs+stamp.nsecs/1000000000.0, decimals=2)
+        return np.round(stamp,decimals=1)
+    return np.round(stamp.secs+stamp.nsecs/1000000000.0, decimals=1)
 
 def wrap_pi(a):
     while a <= -np.pi:

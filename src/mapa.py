@@ -29,7 +29,7 @@ class Mapa(object):
         self._initMapa()
 
     def _initMapa(self):
-        self.interval = np.array([[-25, 25], [-25, 25]])
+        self.interval = np.array([[-2, 2], [-2, 2]])
         self.dimensions = np.array([int(self.invPrecision * (self.interval[0, 1] - self.interval[0, 0])),
                                     int(self.invPrecision * (self.interval[1, 1] - self.interval[1, 0]))])
         self.grid = np.full(self.dimensions, 0.5, dtype=np.float)
