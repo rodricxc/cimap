@@ -223,6 +223,9 @@ class Robot(object):
         self.sendVelocities(vel=[0, 0, 0])
         self.sendVelocities(vel=[0, 0, 0])
         self.sendVelocities(vel=[0, 0, 0])
+        self.sendVelocities(vel=[0, 0, 0])
+        self.sendVelocities(vel=[0, 0, 0])
+        self.sendVelocities(vel=[0, 0, 0])
         self.started = False
         self.stopRosComunicacao()
 
@@ -274,7 +277,7 @@ class Robot(object):
 
         # GT update
         _, _, yaw = self.oriToEuler(data.pose.pose.orientation)
-        current_state.gt = State([data.pose.pose.position.x, data.pose.pose.position.y, yaw])
+        current_state.gt = State([data.pose.pose.position.x, -data.pose.pose.position.y, yaw])
 
         # finished to process poses transitions
         current_state.setPoseFinished(True)
@@ -667,7 +670,7 @@ class Robot(object):
 
 
     def verifyHits(self, current_state):
-        if self.willHit(current_state, required=0.09):
+        if self.willHit(current_state, required=0.095):
             self.storeHitPos(current_state)
             hitting = True
         else:

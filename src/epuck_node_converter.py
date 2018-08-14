@@ -26,7 +26,7 @@ class Solver(object):
     def init_node(self):
         rospy.init_node('epuck_converter', anonymous=False)
         # self._num_robots = rospy.get_param("/num_robots")
-        self._in_ids = [ 1, 3, 4, 6]
+        self._in_ids = [0, 1, 2, 3, 4, 5]
 
         self.swarm_converters = [RobotConverter(id_in, id_out) for id_out, id_in in enumerate(self._in_ids)]
         [r.init_comm() for r in self.swarm_converters]
@@ -144,11 +144,11 @@ class RobotConverter(object):
 
     def updateProximity(self, i):
         def _update(data):
-            if self._ranges_base[i] < data.range:
-                 self._ranges_base[i] = data.range
-            self.ranges[i] = (data.range/self._ranges_base[i])*0.05
+            # if self._ranges_base[i] < data.range:
+            #      self._ranges_base[i] = min(data.range, 0.05)
+            # self.ranges[i] = (data.range/self._ranges_base[i])*0.05
 
-            # self.ranges[i] = data.range
+            self.ranges[i] = data.range
         return _update
 
     def repassCmd(self, data):

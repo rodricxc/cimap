@@ -76,7 +76,9 @@ class Solver(object):
 
         # self.calcAllHits()
         # [r.stop() for r in self.swarm]
-        
+        self.rate.sleep()
+        self.rate.sleep()
+        self.rate.sleep()
         if not  rospy.is_shutdown() :
             pass
 
@@ -102,7 +104,7 @@ class Solver(object):
             try:
                 # gt 
                 pose = s.gt.mean
-                pose[1]*=-1
+                # pose[1]*=-1
                 pose[2] = robot.wrap_pi(pose[2])
                 proportion = 0.03
                 
