@@ -26,7 +26,7 @@ class Solver(object):
     def init_node(self):
         rospy.init_node('epuck_converter', anonymous=False)
         # self._num_robots = rospy.get_param("/num_robots")
-        self._in_ids = [0, 1, 2, 3, 4, 5]
+        self._in_ids = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
         self.swarm_converters = [RobotConverter(id_in, id_out) for id_out, id_in in enumerate(self._in_ids)]
         [r.init_comm() for r in self.swarm_converters]
