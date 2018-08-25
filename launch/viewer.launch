@@ -1,5 +1,7 @@
 <launch>
 
-  <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find swarm_map)/launch/rviz_launch.rviz" />
+  <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find cimap)/epuck_driver/rviz/epuck.rviz" />
+  <node pkg="tf" type="static_transform_publisher" name="world_odom_tf" args="0 0 0 0 0 0 1 /world /odom 30"/>
+	<node pkg="tf" type="static_transform_publisher" name="world_map_tf" args="0 0 0 1 0 0 0 /world /map_base 30"/>
 
 </launch>
