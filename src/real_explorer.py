@@ -37,6 +37,7 @@ class Solver(object):
 
         self._map_resolution = 0.01
         self._map_gt = mapa.Mapa(self._map_resolution, "map_server_ideal")
+        self._map_odom = mapa.Mapa(self._map_resolution, "map_server_odom")
 
         self._ranger_max = 0.1
         self._ranger_irm_side = int(
@@ -59,32 +60,34 @@ class Solver(object):
 
         # store start time
         starttime = rospy.get_rostime()
-        self.start_at = starttime
+        self.start_at = robot.stamptofloat(starttime)
 
         # start robots
         [r.start() for r in self.swarm]
         [r.useGps(False) for r in self.swarm]
+        # [r.initPosePublishers() for r in self.swarm]
 
 
         while not rospy.is_shutdown() and not self.stop:
             now = rospy.get_rostime()
             # self.plot_path()
-            self.mapUpdate()
-            self._map_gt.publishMap()
+            # self.mapUpdate()
+            # self._map_gt.publishMap()
+            # self._map_odom.publishMap()
 
             self.rate.sleep()
 
         # self.calcAllHits()
         # [r.stop() for r in self.swarm]
+        self.stoped_at = robot.stamptofloat(rospy.get_rostime())
         self.rate.sleep()
         self.rate.sleep()
         self.rate.sleep()
+
+
         if not  rospy.is_shutdown() :
-            pass
-
-            # self.calcAllHits()
-
-            # self.saveSwarm()
+            self.calcAllHits()
+            self.saveSwarm()
 
     def mapUpdate(self):
         for r in self.swarm:
@@ -104,7 +107,6 @@ class Solver(object):
             try:
                 # gt 
                 pose = s.gt.mean
-                # pose[1]*=-1
                 pose[2] = robot.wrap_pi(pose[2])
                 proportion = 0.03
                 
@@ -114,6 +116,18 @@ class Solver(object):
                     l_0=0.5, l_occ=0.5+3*proportion, l_free=0.5-proportion)
                 
                 self._map_gt.logUpdateRegion(pos=pose[:2], m=rim)
+
+                # odom 
+                pose = s.odom.mean
+                pose[2] = robot.wrap_pi(pose[2])
+                proportion = 0.03
+                
+                rim = self.ranger_to_inverse_model(
+                    ranges, 
+                    np.pi*k+pose[2], 
+                    l_0=0.5, l_occ=0.5+3*proportion, l_free=0.5-proportion)
+                
+                self._map_odom.logUpdateRegion(pos=pose[:2], m=rim)
                 
             except Exception as e:
                 # print(pose)
@@ -156,7 +170,7 @@ class Solver(object):
     def plot_path(self):
         plt.figure(num='r0', figsize=(12,12))
         plt.clf()
-        for r in self.swarm[:2]:
+        for r in self.swarm[:1]:
 
             x = []
             y = []
@@ -175,32 +189,71 @@ class Solver(object):
                 if s.gt is not None:
                     xa, ya = s.gt.mean[:2]
                     x.append(xa)
-                    y.append(-ya)
+                    y.append(ya)
 
                 count -=1
                 s = s.previous
 
             ax = plt.axes()
 
-            
+            plt.plot(x,y,'-')
+            ax.arrow(first[0], first[1], 0.1*np.cos(first[2]), 0.1*np.sin(first[2]), head_width=0.01, head_length=0.02, fc='k', ec='k')
 
+        for r in self.swarm[:1]:
+
+            x = []
+            y = []
+
+            s = r.getState()
+
+            count = 2000
+            # print s
+
+            while s.gt is None:
+                s = s.previous
+            s = s.previous
+            first = s.odom.mean
+            while s is not None and count > 0:
+                if s.gt is not None:
+                    xa, ya = s.odom.mean[:2]
+                    x.append(xa)
+                    y.append(ya)
+
+                count -=1
+                s = s.previous
+
+            ax = plt.axes()
 
             plt.plot(x,y,'-')
-            ax.arrow(first[0], -first[1], 0.1*np.cos(first[2]), 0.1*np.sin(first[2]), head_width=0.05, head_length=0.1, fc='k', ec='k')
+            ax.arrow(first[0], first[1], 0.1*np.cos(first[2]), 0.1*np.sin(first[2]), head_width=0.01, head_length=0.02, fc='k', ec='k')
 
-        plt.axis([-0.9,0.1,-0.6,0.4])
+
+
+        plt.axis([-0.9,0.9,-0.9,0.9])
         plt.show(block=False)
         plt.pause(0.001)
 
 
 
 
+    def calcSavepath(self):
+        pack_path = rospkg.RosPack().get_path('cimap')
+        dir_path = '{}/log/simulation/{}/{}/{}/'.format(pack_path,self._map_name, self._num_robots, self._experiment_id)
+
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+
+        if not os.path.exists(dir_path+"maps"):
+            os.makedirs(dir_path+"maps")
+
+        return dir_path
+
     def calcAllHits(self):
-        time_limit = robot.stamptofloat(rospy.get_rostime())
-        t = 0.0
+        # process al robots for this time
+
+        t = self.start_at
         print('[Status]: calculating hits')
-        while t <= time_limit:
-            # process al robots for this time
+        while t <= self.stoped_at:
             for r1 in self.swarm:
                 for r2 in self.swarm:
                     if r1.id != r2.id:
@@ -208,21 +261,29 @@ class Solver(object):
                         if ed and ed <= self._robot_perception_distance:
                             rs1.addCloseRobot(robot.CloseRobot(r2.id, ed, ori)) 
 
-            # increment time
+            k = t - self.start_at
+
+            if int(k*10)%100 == 0:
+                print "calc at time %6.1f" % k
+
             t += 0.1
 
-    def saveSwarm(self):
-        print('[Status]: Saving Swarm Pickle')
-        
-        pack_path = rospkg.RosPack().get_path('cimap')
-        dir_path = '{}/log/simulation/{}/{}/{}/'.format(pack_path,self._map_name, self._num_robots, self._experiment_id)
 
-        if not os.path.exists(dir_path):
-            os.makedirs(dir_path)
+
+    def saveSwarm(self):
+
+        
+        print('[Status]: Saving Swarm Pickle')
+
+        [r.set_max_min_times([self.start_at, self.stoped_at]) for r in self.swarm]
+
+        dir_path = self.calcSavepath()
         
         # dump data into plicke object
         output = open(dir_path+'swarm.pkl', 'wb')
-        [r.prepareToPickle() for r in self.swarm]
+        [self.swarm[i].prepareToPickle() for i in range(len(self.swarm))]
+        
+
         pickle.dump(self.swarm, output)
         output.close()
 

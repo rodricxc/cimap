@@ -10,8 +10,6 @@
 
 	<node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="true" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) $(arg cam_image_topic) $(arg cam_info_topic) $(arg output_frame)" />
 
-	<node pkg="tf" type="static_transform_publisher" name="world_camera_tf" args="0 0 -1.61 0 0 0 1 /world /head_camera 30"/>
-	<node pkg="tf" type="static_transform_publisher" name="world_odom_tf" args="0 0 0 0 0 0 1 /world /odom 30"/>
-	<node pkg="tf" type="static_transform_publisher" name="world_map_tf" args="0 0 0 1 0 0 0 /world /map_base 30"/>
+	<node pkg="tf" type="static_transform_publisher" name="world_camera_tf" args="0 0 -1.58 0 0 0 1 /world /head_camera 30"/>
 
 </launch>

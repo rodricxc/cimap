@@ -1,8 +1,8 @@
 <launch>
     <!--  Arguments for simulation launch -->
-    <arg name="num_robots" default="12" /> <!-- 12, 24, 36 -->
-    <arg name="robot_prerception_distance" default="1.0" /> 
-    <arg name="map" default="simple8" />  <!-- map used on simulation-->
+    <arg name="num_robots" default="1" /> <!-- 12, 24, 36 -->
+    <arg name="robot_prerception_distance" default="0.1" /> 
+    <arg name="map" default="real" />  <!-- map used on simulation-->
     <arg name="experiment_id" default="0" /> 
     <arg name="stoptime" default="300" /> 
     <arg name="map_resolution" default="0.1" /> 
@@ -18,12 +18,13 @@
 
 
     <!-- RVIZ -->
-    <node pkg="rviz" type="rviz" name="rviz"  args="-d $(find cimap)/launch/rviz_launch.rviz" />
+    <!-- <node pkg="rviz" type="rviz" name="rviz"  args="-d $(find cimap)/launch/rviz_launch.rviz" /> -->
 
     <!-- CIMAP NODE -->
     <node pkg="cimap" type="processer.py" name='cimap_processer' output="screen" required="true"/>
 
     <!-- Transformrt publisher -->
     <node pkg="tf" type="static_transform_publisher" name="tf_broadcaster_1" args="0 0 0 0 0 0 /map_base /odom 100" />
+    <node pkg="tf" type="static_transform_publisher" name="tf_broadcaster_w" args="0 0 0 0 0 0 /map_base /world 100" />
 
 </launch>

@@ -5,9 +5,10 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Marker1/Namespaces1
-        - /Map1/Orientation1
+        - /Map_gt1/Orientation1
         - /Camera1/Visibility1
-      Splitter Ratio: 0.491666675
+        - /Poses1
+      Splitter Ratio: 0.492795378
     Tree Height: 600
   - Class: rviz/Selection
     Name: Selection
@@ -57,6 +58,248 @@ Visualization Manager:
         {}
       Queue Size: 100
       Value: true
+    - Class: rviz/Group
+      Displays:
+        - Angle Tolerance: 0.100000001
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.300000012
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Keep: 1
+          Name: Odometry
+          Position Tolerance: 0.100000001
+          Shape:
+            Alpha: 1
+            Axes Length: 1
+            Axes Radius: 0.100000001
+            Color: 255; 25; 0
+            Head Length: 0.0299999993
+            Head Radius: 0.00999999978
+            Shaft Length: 0.100000001
+            Shaft Radius: 0.00499999989
+            Value: Arrow
+          Topic: /robot_0/base_pose_ground_truth
+          Unreliable: false
+          Value: true
+        - Angle Tolerance: 0.100000001
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.300000012
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: false
+          Keep: 1
+          Name: Odometry
+          Position Tolerance: 0.100000001
+          Shape:
+            Alpha: 1
+            Axes Length: 1
+            Axes Radius: 0.100000001
+            Color: 255; 25; 0
+            Head Length: 0.0299999993
+            Head Radius: 0.00999999978
+            Shaft Length: 0.100000001
+            Shaft Radius: 0.00499999989
+            Value: Arrow
+          Topic: /robot_1/base_pose_ground_truth
+          Unreliable: false
+          Value: false
+        - Angle Tolerance: 0.100000001
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.300000012
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: false
+          Keep: 1
+          Name: Odometry
+          Position Tolerance: 0.100000001
+          Shape:
+            Alpha: 1
+            Axes Length: 1
+            Axes Radius: 0.100000001
+            Color: 255; 25; 0
+            Head Length: 0.0299999993
+            Head Radius: 0.00999999978
+            Shaft Length: 0.100000001
+            Shaft Radius: 0.00499999989
+            Value: Arrow
+          Topic: /robot_2/base_pose_ground_truth
+          Unreliable: false
+          Value: false
+        - Angle Tolerance: 0.100000001
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.300000012
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: false
+          Keep: 1
+          Name: Odometry
+          Position Tolerance: 0.100000001
+          Shape:
+            Alpha: 1
+            Axes Length: 1
+            Axes Radius: 0.100000001
+            Color: 255; 25; 0
+            Head Length: 0.0299999993
+            Head Radius: 0.00999999978
+            Shaft Length: 0.100000001
+            Shaft Radius: 0.00499999989
+            Value: Arrow
+          Topic: /robot_3/base_pose_ground_truth
+          Unreliable: false
+          Value: false
+        - Angle Tolerance: 0.100000001
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.300000012
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: false
+          Keep: 1
+          Name: Odometry
+          Position Tolerance: 0.100000001
+          Shape:
+            Alpha: 1
+            Axes Length: 1
+            Axes Radius: 0.100000001
+            Color: 255; 25; 0
+            Head Length: 0.0299999993
+            Head Radius: 0.00999999978
+            Shaft Length: 0.100000001
+            Shaft Radius: 0.00499999989
+            Value: Arrow
+          Topic: /robot_4/base_pose_ground_truth
+          Unreliable: false
+          Value: false
+        - Angle Tolerance: 0.100000001
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.300000012
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: false
+          Keep: 1
+          Name: Odometry
+          Position Tolerance: 0.100000001
+          Shape:
+            Alpha: 1
+            Axes Length: 1
+            Axes Radius: 0.100000001
+            Color: 255; 25; 0
+            Head Length: 0.0299999993
+            Head Radius: 0.00999999978
+            Shaft Length: 0.100000001
+            Shaft Radius: 0.00499999989
+            Value: Arrow
+          Topic: /robot_5/base_pose_ground_truth
+          Unreliable: false
+          Value: false
+        - Angle Tolerance: 0.100000001
+          Class: rviz/Odometry
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: true
+            Position:
+              Alpha: 0.300000012
+              Color: 204; 51; 204
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: false
+          Keep: 1
+          Name: Odometry
+          Position Tolerance: 0.100000001
+          Shape:
+            Alpha: 1
+            Axes Length: 1
+            Axes Radius: 0.100000001
+            Color: 255; 25; 0
+            Head Length: 0.0299999993
+            Head Radius: 0.00999999978
+            Shaft Length: 0.100000001
+            Shaft Radius: 0.00499999989
+            Value: Arrow
+          Topic: /robot_6/base_pose_ground_truth
+          Unreliable: false
+          Value: false
+      Enabled: false
+      Name: Odometries_in
     - Class: rviz/TF
       Enabled: false
       Frame Timeout: 15
@@ -70,244 +313,6 @@ Visualization Manager:
       Tree:
         {}
       Update Interval: 0
-      Value: false
-    - Angle Tolerance: 0.100000001
-      Class: rviz/Odometry
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
-          Value: true
-        Position:
-          Alpha: 0.300000012
-          Color: 204; 51; 204
-          Scale: 1
-          Value: true
-        Value: true
-      Enabled: true
-      Keep: 1
-      Name: Odometry
-      Position Tolerance: 0.100000001
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.100000001
-        Color: 255; 25; 0
-        Head Length: 0.0299999993
-        Head Radius: 0.00999999978
-        Shaft Length: 0.100000001
-        Shaft Radius: 0.00499999989
-        Value: Arrow
-      Topic: /robot_0/base_pose_ground_truth
-      Unreliable: false
-      Value: true
-    - Angle Tolerance: 0.100000001
-      Class: rviz/Odometry
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
-          Value: true
-        Position:
-          Alpha: 0.300000012
-          Color: 204; 51; 204
-          Scale: 1
-          Value: true
-        Value: true
-      Enabled: true
-      Keep: 1
-      Name: Odometry
-      Position Tolerance: 0.100000001
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.100000001
-        Color: 255; 25; 0
-        Head Length: 0.0299999993
-        Head Radius: 0.00999999978
-        Shaft Length: 0.100000001
-        Shaft Radius: 0.00499999989
-        Value: Arrow
-      Topic: /robot_1/base_pose_ground_truth
-      Unreliable: false
-      Value: true
-    - Angle Tolerance: 0.100000001
-      Class: rviz/Odometry
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
-          Value: true
-        Position:
-          Alpha: 0.300000012
-          Color: 204; 51; 204
-          Scale: 1
-          Value: true
-        Value: true
-      Enabled: true
-      Keep: 1
-      Name: Odometry
-      Position Tolerance: 0.100000001
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.100000001
-        Color: 255; 25; 0
-        Head Length: 0.0299999993
-        Head Radius: 0.00999999978
-        Shaft Length: 0.100000001
-        Shaft Radius: 0.00499999989
-        Value: Arrow
-      Topic: /robot_2/base_pose_ground_truth
-      Unreliable: false
-      Value: true
-    - Angle Tolerance: 0.100000001
-      Class: rviz/Odometry
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
-          Value: true
-        Position:
-          Alpha: 0.300000012
-          Color: 204; 51; 204
-          Scale: 1
-          Value: true
-        Value: true
-      Enabled: true
-      Keep: 1
-      Name: Odometry
-      Position Tolerance: 0.100000001
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.100000001
-        Color: 255; 25; 0
-        Head Length: 0.0299999993
-        Head Radius: 0.00999999978
-        Shaft Length: 0.100000001
-        Shaft Radius: 0.00499999989
-        Value: Arrow
-      Topic: /robot_3/base_pose_ground_truth
-      Unreliable: false
-      Value: true
-    - Angle Tolerance: 0.100000001
-      Class: rviz/Odometry
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
-          Value: true
-        Position:
-          Alpha: 0.300000012
-          Color: 204; 51; 204
-          Scale: 1
-          Value: true
-        Value: true
-      Enabled: true
-      Keep: 1
-      Name: Odometry
-      Position Tolerance: 0.100000001
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.100000001
-        Color: 255; 25; 0
-        Head Length: 0.0299999993
-        Head Radius: 0.00999999978
-        Shaft Length: 0.100000001
-        Shaft Radius: 0.00499999989
-        Value: Arrow
-      Topic: /robot_4/base_pose_ground_truth
-      Unreliable: false
-      Value: true
-    - Angle Tolerance: 0.100000001
-      Class: rviz/Odometry
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
-          Value: true
-        Position:
-          Alpha: 0.300000012
-          Color: 204; 51; 204
-          Scale: 1
-          Value: true
-        Value: true
-      Enabled: true
-      Keep: 1
-      Name: Odometry
-      Position Tolerance: 0.100000001
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.100000001
-        Color: 255; 25; 0
-        Head Length: 0.0299999993
-        Head Radius: 0.00999999978
-        Shaft Length: 0.100000001
-        Shaft Radius: 0.00499999989
-        Value: Arrow
-      Topic: /robot_5/base_pose_ground_truth
-      Unreliable: false
-      Value: true
-    - Angle Tolerance: 0.100000001
-      Class: rviz/Odometry
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
-          Value: true
-        Position:
-          Alpha: 0.300000012
-          Color: 204; 51; 204
-          Scale: 1
-          Value: true
-        Value: true
-      Enabled: false
-      Keep: 1
-      Name: Odometry
-      Position Tolerance: 0.100000001
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.100000001
-        Color: 255; 25; 0
-        Head Length: 0.0299999993
-        Head Radius: 0.00999999978
-        Shaft Length: 0.100000001
-        Shaft Radius: 0.00499999989
-        Value: Arrow
-      Topic: /robot_6/base_pose_ground_truth
-      Unreliable: false
       Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
@@ -343,9 +348,19 @@ Visualization Manager:
       Class: rviz/Map
       Color Scheme: map
       Draw Behind: false
-      Enabled: true
-      Name: Map
+      Enabled: false
+      Name: Map_gt
       Topic: /map_server_ideal/map
+      Unreliable: false
+      Use Timestamp: false
+      Value: false
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map_odom
+      Topic: /map_server_odom/map
       Unreliable: false
       Use Timestamp: false
       Value: true
@@ -362,12 +377,945 @@ Visualization Manager:
       Visibility:
         Grid: false
         LaserScan: true
-        Map: true
+        Map_filtered: true
+        Map_gps: true
+        Map_gt: true
+        Map_odom: true
         Marker: true
-        Odometry: true
+        Odometries_in:
+          Odometry: true
+          Value: true
+        Poses:
+          Value: true
+          robot_0:
+            Path_gt: true
+            Path_odom: true
+            Value: true
+            filtered: true
+            gt: true
+            odom: true
+          robot_1:
+            Path_gt: true
+            Path_odom: true
+            Value: true
+            filtered: true
+            gt: true
+            odom: true
+          robot_2:
+            Path_gt: true
+            Path_odom: true
+            Value: true
+            filtered: true
+            gt: true
+            odom: true
+          robot_3:
+            Path_gt: true
+            Path_odom: true
+            Value: true
+            filtered: true
+            gt: true
+            odom: true
+          robot_4:
+            Path_gt: true
+            Path_odom: true
+            Value: true
+            filtered: true
+            gt: true
+            odom: true
+          robot_5:
+            Path_gt: true
+            Path_odom: true
+            Value: true
+            filtered: true
+            gt: true
+            odom: true
         TF: false
         Value: true
       Zoom Factor: 1
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 85; 170; 0
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: true
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: filtered
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_0/pose_filtered_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 0; 0; 255
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: gt
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_0/pose_gt_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 255; 241; 38
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: odom
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_0/pose_noised_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 0; 0; 255
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_gt
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_gt
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 227; 151; 0
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_odom
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_odom
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: robot_0
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 85; 170; 0
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: true
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: filtered
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_1/pose_filtered_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 0; 0; 255
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: gt
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_1/pose_gt_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 255; 241; 38
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: odom
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_1/pose_noised_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 0; 0; 255
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_gt
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_gt
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 227; 151; 0
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_odom
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_odom
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: robot_1
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 85; 170; 0
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: true
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: filtered
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_2/pose_filtered_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 0; 0; 255
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: gt
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_2/pose_gt_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 255; 241; 38
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: odom
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_2/pose_noised_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 0; 0; 255
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_gt
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_gt
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 227; 151; 0
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_odom
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_odom
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: robot_2
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 85; 170; 0
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: true
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: filtered
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_3/pose_filtered_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 0; 0; 255
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: gt
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_3/pose_gt_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 255; 241; 38
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: odom
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_3/pose_noised_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 0; 0; 255
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_gt
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_gt
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 227; 151; 0
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_odom
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_odom
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: robot_3
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 85; 170; 0
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: true
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: filtered
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_4/pose_filtered_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 0; 0; 255
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: gt
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_4/pose_gt_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 255; 241; 38
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: odom
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_4/pose_noised_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 0; 0; 255
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_gt
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_gt
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 227; 151; 0
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_odom
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_odom
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: robot_4
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 85; 170; 0
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: true
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: filtered
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_5/pose_filtered_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 0; 0; 255
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: gt
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_5/pose_gt_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Axes Length: 1
+              Axes Radius: 0.100000001
+              Class: rviz/PoseWithCovariance
+              Color: 255; 241; 38
+              Covariance:
+                Orientation:
+                  Alpha: 0.5
+                  Color: 255; 255; 127
+                  Color Style: Unique
+                  Frame: Local
+                  Offset: 1
+                  Scale: 1
+                  Value: true
+                Position:
+                  Alpha: 0.300000012
+                  Color: 204; 51; 204
+                  Scale: 1
+                  Value: true
+                Value: false
+              Enabled: true
+              Head Length: 0.0299999993
+              Head Radius: 0.00999999978
+              Name: odom
+              Shaft Length: 0.100000001
+              Shaft Radius: 0.00499999989
+              Shape: Arrow
+              Topic: /robot_5/pose_noised_with_cov
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 0; 0; 255
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_gt
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_gt
+              Unreliable: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 227; 151; 0
+              Enabled: true
+              Head Diameter: 0.300000012
+              Head Length: 0.200000003
+              Length: 0.300000012
+              Line Style: Lines
+              Line Width: 0.0299999993
+              Name: Path_odom
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.0299999993
+              Shaft Diameter: 0.100000001
+              Shaft Length: 0.100000001
+              Topic: /robot_0/path_odom
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: robot_5
+      Enabled: true
+      Name: Poses
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: false
+      Name: Map_gt
+      Topic: /map_server_ideal/map
+      Unreliable: false
+      Use Timestamp: false
+      Value: false
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map_filtered
+      Topic: /map_server_filtered/map
+      Unreliable: false
+      Use Timestamp: false
+      Value: true
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: false
+      Name: Map_odom
+      Topic: /map_server_noised/map
+      Unreliable: false
+      Use Timestamp: false
+      Value: false
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: false
+      Name: Map_gps
+      Topic: /map_server_gps/map
+      Unreliable: false
+      Use Timestamp: false
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 227; 227; 227
@@ -393,25 +1341,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.74779606
+      Distance: 2.24653673
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.299076617
-        Y: 0.0744512379
-        Z: -1.7285347e-06
+        X: -0.0130203664
+        Y: -0.533842921
+        Z: 0
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
-      Invert Z Axis: true
+      Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.36520314
+      Pitch: 1.27479661
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 4.67123461
+      Yaw: 4.67858458
     Saved: ~
 Window Geometry:
   Camera:
@@ -421,7 +1369,7 @@ Window Geometry:
   Height: 1056
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a000003dafc0200000009fb000000100044006900730070006c006100790073010000002800000299000000d700fffffffb0000000c00430061006d00650072006101000002c70000013b0000001600fffffffb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000003dafc0200000004fc00000028000003da000000ad00fffffffa000000010100000002fb0000000c00430061006d0065007200610000000000ffffffff0000000000000000fb0000000a0056006900650077007301000004f00000010f0000010f00fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0049006d0061006700650100000304000002d60000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b2000000000000000000000002000005ff000000d7fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005a00000003efc0100000002fb0000000800540069006d00650000000000000005a00000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000004ba000003da00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000180000003dafc0200000009fb000000100044006900730070006c006100790073010000002800000299000000d700fffffffb0000000c00430061006d00650072006101000002c70000013b0000001600fffffffb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000003dafc0200000004fc00000028000003da000000ad00fffffffa000000010100000002fb0000000c00430061006d0065007200610000000000ffffffff0000000000000000fb0000000a0056006900650077007301000004f00000010f0000010f00fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0049006d0061006700650100000304000002d60000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b2000000000000000000000002000005ff000000d7fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005a00000003efc0100000002fb0000000800540069006d00650000000000000005a00000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000004a4000003da00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:

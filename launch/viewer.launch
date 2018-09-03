@@ -2,6 +2,10 @@
 
   <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find cimap)/epuck_driver/rviz/epuck.rviz" />
   <node pkg="tf" type="static_transform_publisher" name="world_odom_tf" args="0 0 0 0 0 0 1 /world /odom 30"/>
-	<node pkg="tf" type="static_transform_publisher" name="world_map_tf" args="0 0 0 1 0 0 0 /world /map_base 30"/>
+	<node pkg="tf" type="static_transform_publisher" name="world_map_tf" args="0 0 0 0 0 0 1 /world /map_base 30"/>
+
+  <param name="tf_prefix" value="odom" />
+  <param name="robot_description" textfile="$(find cimap)/epuck_driver/urdf/epuck_urdf.xml"/>
+  <node name="epuck_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
 </launch>

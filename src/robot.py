@@ -39,6 +39,8 @@ class Robot(object):
 
         self.initStates()
         self.initRosCom()
+
+        self._max_min_times = [-1,-1]
         
         # state variables
         self.randomDirection = random.random()*np.pi*2
@@ -63,12 +65,23 @@ class Robot(object):
 
 
         self.last_pose = None
+        self.last_odom = None
+
+        self._base_pose = None
+        self._base_odom = None
+
+
+        self._path_msgs_odom_list = Path()
+        self._path_msgs_gt_list = Path()
 
         print "[Status]: Starting robot named: ", self.nome
 
     @property
     def id(self):
         return self.numero
+
+    def set_max_min_times(self, value):
+        self._max_min_times = value
 
     def isProcessed(self):
         return self._processed
@@ -85,6 +98,18 @@ class Robot(object):
 
     def prepareToPickle(self):
         self._neightbour_update_list = None
+        self.sub_base_scan = None
+        self.sub_base_pose_ground_truth = None
+        self.sub_base_pose_odom = None
+        self.pub_cmd_vel = None
+        self.pub_pose_filtered = None
+        self.pub_pose_gt = None
+        self.pub_pose_odom = None
+        self.pub_path_gt = None
+        self.pub_path_odom = None
+        self._path_msgs_odom_list = None
+        self._path_msgs_gt_list = None
+        
         for t, s in self._states.iteritems():
             s.setPreviousRobotState(None)
         self.state_lock = None
@@ -126,6 +151,8 @@ class Robot(object):
             self._states[timestamp].setPreviousRobotState(self._lastState)
             if timestamp > self._lastState.time:
                 self._lastState = self._states[timestamp]
+            else:
+                print('creating state for old timestamp at robot %d' % self.id)
         self.state_lock.release()
         return self._states[timestamp]
 
@@ -143,6 +170,7 @@ class Robot(object):
         self.unregistered = False
         self.pub_cmd_vel = rospy.Publisher('/' + self.nome + '/cmd_vel', Twist, queue_size=10)
         self.sub_base_pose_ground_truth = rospy.Subscriber("/" + self.nome + "/base_pose_ground_truth", Odometry, self.updateBasePoseNonSync)
+        self.sub_base_pose_odom = rospy.Subscriber("/" + self.nome + "/odom", Odometry, self.updateOdomNonSync)
         self.sub_base_scan = rospy.Subscriber("/" + self.nome + "/base_scan", LaserScan, self.updateLaser)
 
     def stopRosComunicacao(self):
@@ -151,12 +179,20 @@ class Robot(object):
 
         self.sub_base_scan.unregister()
         self.sub_base_pose_ground_truth.unregister()
-        # self.pub_cmd_vel.unregister()
+        self.sub_base_pose_odom.unregister()
+        self.pub_cmd_vel.unregister()
+
+    
+
 
     def initPosePublishers(self):
         self.pub_pose_gt = rospy.Publisher('/' + self.nome + '/pose_gt_with_cov', PoseWithCovarianceStamped, queue_size=1)
         self.pub_pose_odom = rospy.Publisher('/' + self.nome + '/pose_noised_with_cov', PoseWithCovarianceStamped, queue_size=1)
         self.pub_pose_filtered = rospy.Publisher('/' + self.nome + '/pose_filtered_with_cov', PoseWithCovarianceStamped, queue_size=1)
+        
+        self.pub_path_gt = rospy.Publisher('/' + self.nome + '/path_gt', Path, queue_size=1)
+        self.pub_path_odom = rospy.Publisher('/' + self.nome + '/path_odom', Path, queue_size=1)
+        
         self.pose_publishing = True
         
 
@@ -172,12 +208,12 @@ class Robot(object):
     def publishPoses(self, t):
         state = self.getState(t,insert=False)
         if state and self.pose_publishing:
-            self.publishPoseWithCov(self.pub_pose_gt, state.gt, t)
-            self.publishPoseWithCov(self.pub_pose_odom, state.odom, t)
+            self.publishPoseWithCov(self.pub_pose_gt, state.gt, t, path=self._path_msgs_gt_list, path_pub=self.pub_path_gt)
+            self.publishPoseWithCov(self.pub_pose_odom, state.odom, t, path=self._path_msgs_odom_list, path_pub=self.pub_path_odom)
             self.publishPoseWithCov(self.pub_pose_filtered, state.filtered, t)
             
 
-    def publishPoseWithCov(self, publisher, state, t):
+    def publishPoseWithCov(self, publisher, state, t, path=None, path_pub=None):
         if not state:
             return
         # header (no seq)
@@ -191,6 +227,16 @@ class Robot(object):
 
         # publish
         publisher.publish(pwc)
+
+        if path is not None:
+            ps = PoseStamped()
+            ps.pose = pwc.pose.pose
+            ps.header.frame_id = 'odom'
+            path.poses.append(ps)
+            path.poses = path.poses[-100:]
+            path.header.frame_id = 'odom'
+            path.header.stamp = rospy.get_rostime()
+            path_pub.publish(path)
 
     def covConverter(self, cov):
         cov = np.insert(cov, (2, 2, 2), 0, axis=0)
@@ -259,28 +305,81 @@ class Robot(object):
             self.last_pose.header.stamp = data.header.stamp
             self.updateBasePose(self.last_pose)
 
+        if self.last_odom is not None:
+            self.last_odom.header.stamp = data.header.stamp
+            self.updateOdomPose(self.last_odom)
+
+
+        # if self.id == 0:
+        #     k = current_state
+        #     k_a = []
+        #     k_b = []
+        #     i = 100
+        #     while k is not None and i > 0:
+        #         k_a.append(k.gt.mean) 
+        #         k_b.append(k.odom.mean)
+        #         i-=1
+        #         k=k.previous
+        #     print "time: %f" % current_state.time
+        #     print "gt:   ", k_a
+        #     print "odom: ", k_b
+
+
         self.runOnCalbackFinished(current_state)
+
+        # print "here"
+        # self.publishPoses(current_state.time)
 
 
     #### POSE
     def updateBasePoseNonSync(self, data):
         self.last_pose = data
+
+    def updateOdomNonSync(self, data):
+        self.last_odom = data
     
     def updateBasePose(self, data):
         if self.unregistered:
             return
 
         current_state = self.getState(data.header.stamp)
-
-        if self.id==0:
-            print current_state.time
-
         # GT update
         _, _, yaw = self.oriToEuler(data.pose.pose.orientation)
         current_state.gt = State([data.pose.pose.position.x, -data.pose.pose.position.y, yaw])
 
         # finished to process poses transitions
         current_state.setPoseFinished(True)
+        self.runOnCalbackFinished(current_state)
+
+    def updateOdomPose(self, data):
+        if self.unregistered or self.last_pose is None:
+            return
+
+
+
+        current_state = self.getState(data.header.stamp)
+
+        # if self.id==0:
+        #     print current_state.time
+
+        # GT update
+        _, _, yaw = self.oriToEuler(data.pose.pose.orientation)
+        
+        odom_pose = np.array([data.pose.pose.position.x, data.pose.pose.position.y, yaw])
+        
+        if self._base_pose is None or self._base_odom is None:
+            self._base_pose = current_state.gt.mean
+            self._base_odom = odom_pose
+            rot_ang = self._base_pose[2]-self._base_odom[2]
+            self._rot_odom =  np.array([[np.cos(rot_ang), -np.sin(rot_ang), 0],
+                                        [np.sin(rot_ang),  np.cos(rot_ang), 0],
+                                        [              0,                0, 1]]) 
+        
+        odom_pose_converted = self._rot_odom.dot(odom_pose-self._base_odom) + self._base_pose        
+        current_state.odom = State(odom_pose_converted)
+
+        # finished to process poses transitions
+        # current_state.setPoseFinished(True)
         self.runOnCalbackFinished(current_state)
 
     def runOnCalbackFinished(self, current_state):
@@ -308,13 +407,20 @@ class Robot(object):
         s0.odom = s1.gt
         s0.filtered = s1.gt
         
-        for t in seq:
+        for i, t in enumerate(seq):
             rs1 = self.getState(t)
             rs0 = rs1.previous
             if rs1.gt is None:
                 rs1.gt = rs0.gt
-            rs1.odom = State(m_odom([rs0.gt.mean, rs1.gt.mean], rs0.odom.mean, odom_parameters))
+            if rs1.odom is None:
+                rs1.odom = rs0.odom
+            # rs1.odom = State(m_odom([rs0.gt.mean, rs1.gt.mean], rs0.odom.mean, odom_parameters))
             rs1.filtered = rs1.odom
+
+        for t in seq:
+            rs1 = self.getState(t)
+            if rs1.odom is None:
+                print('rs1 is None at %f'%t)
         
 
     # UPDATE FUNCTIONS
@@ -338,9 +444,9 @@ class Robot(object):
 
         # in case of using gps, update with kalman filter
         if self.hasGps():
-            GPS_NOISE = np.diag([0.5, 0.5, 0.3])
+            GPS_NOISE = np.diag([0.05, 0.05, 0.1])
 
-            x_gps = current_state.gt.mean +  np.random.multivariate_normal((0,0,0), GPS_NOISE)
+            x_gps = current_state.gt.mean # +  np.random.multivariate_normal((0,0,0), GPS_NOISE)
             P_gps = GPS_NOISE            
             
             # normalize angles into smalest distance possible 
@@ -465,6 +571,14 @@ class Robot(object):
         # calc variables for transition
         self._last_t_processed = t
         self._u, self._E = odom_to_control([current_state.previous.odom.mean, current_state.odom.mean], error)
+
+        if self._u[0] > 0.2 :
+            print 'robot %d walked too much %s' % (self.id, str(self._u))
+            self._u = np.array([0,0])
+
+
+
+
         self._phi = self.createPhiMatrix(self._u, current_state.previous.filtered.mean[2])
         self._G = self.createGMatrix(current_state.previous.filtered.mean[2])
 
@@ -559,7 +673,7 @@ class Robot(object):
 
         x = self._max_vel*np.cos(dif_ang)*self.reverse
 
-        w = dif_ang
+        w = dif_ang*0.5
         y = 0
 
         self.sendVelocities((x, y, w))
